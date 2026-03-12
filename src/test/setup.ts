@@ -9,7 +9,7 @@ afterEach(() => {
 
 // Mock ResizeObserver if not available
 if (typeof ResizeObserver === 'undefined') {
-  global.ResizeObserver = vi.fn().mockImplementation(() => ({
+  (globalThis as Record<string, unknown>).ResizeObserver = vi.fn().mockImplementation(() => ({
     observe: vi.fn(),
     unobserve: vi.fn(),
     disconnect: vi.fn(),
@@ -18,7 +18,7 @@ if (typeof ResizeObserver === 'undefined') {
 
 // Mock IntersectionObserver if not available
 if (typeof IntersectionObserver === 'undefined') {
-  global.IntersectionObserver = vi.fn().mockImplementation(() => ({
+  (globalThis as Record<string, unknown>).IntersectionObserver = vi.fn().mockImplementation(() => ({
     observe: vi.fn(),
     unobserve: vi.fn(),
     disconnect: vi.fn(),

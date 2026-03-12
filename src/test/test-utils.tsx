@@ -1,10 +1,11 @@
-import { ReactElement, ReactNode } from 'react'
-import { render, RenderOptions } from '@testing-library/react'
+import type { ReactElement, ReactNode } from 'react'
+import { render, type RenderOptions } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from '@/hooks/use-theme'
 import { FrameworkProvider } from '@/hooks/use-framework'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { expect } from 'vitest'
 
 // All providers wrapper
 interface AllProvidersProps {

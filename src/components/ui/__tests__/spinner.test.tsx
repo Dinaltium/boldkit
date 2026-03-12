@@ -41,8 +41,8 @@ describe('Spinner', () => {
       expect(spinner).toBeInTheDocument()
     })
 
-    it('renders ring variant', () => {
-      render(<Spinner variant="ring" data-testid="spinner" />)
+    it('renders default variant', () => {
+      render(<Spinner variant="default" data-testid="spinner" />)
       const spinner = screen.getByTestId('spinner')
       expect(spinner).toBeInTheDocument()
     })
