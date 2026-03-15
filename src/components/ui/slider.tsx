@@ -46,6 +46,12 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
     const animationRef = React.useRef<number | null>(null)
     const lastTimeRef = React.useRef<number>(0)
 
+    // Track active drag handlers for cleanup on unmount
+    const dragHandlersRef = React.useRef<{
+      onMove: ((e: PointerEvent) => void) | null
+      onUp: (() => void) | null
+    }>({ onMove: null, onUp: null })
+
     const isControlled = controlledValue !== undefined
     const [uncontrolledValue, setUncontrolledValue] = React.useState(defaultValue)
     const actualValue = isControlled ? controlledValue : uncontrolledValue
@@ -142,6 +148,19 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
         }
       }
     }, [targets, stiffness, damping, mass])
+
+    // Cleanup drag handlers on unmount
+    React.useEffect(() => {
+      return () => {
+        const { onMove, onUp } = dragHandlersRef.current
+        if (onMove) {
+          document.removeEventListener('pointermove', onMove)
+        }
+        if (onUp) {
+          document.removeEventListener('pointerup', onUp)
+        }
+      }
+    }, [])
 
     const getValueFromPosition = (clientX: number, clientY: number) => {
       if (!trackRef.current) return 0
@@ -252,7 +271,11 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
         onValueCommit?.(actualValue)
         document.removeEventListener('pointermove', handlePointerMove)
         document.removeEventListener('pointerup', handlePointerUp)
+        dragHandlersRef.current = { onMove: null, onUp: null }
       }
+
+      // Store handlers for cleanup
+      dragHandlersRef.current = { onMove: handlePointerMove, onUp: handlePointerUp }
 
       document.addEventListener('pointermove', handlePointerMove)
       document.addEventListener('pointerup', handlePointerUp)
@@ -285,7 +308,11 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
         onValueCommit?.(actualValue)
         document.removeEventListener('pointermove', handlePointerMove)
         document.removeEventListener('pointerup', handlePointerUp)
+        dragHandlersRef.current = { onMove: null, onUp: null }
       }
+
+      // Store handlers for cleanup
+      dragHandlersRef.current = { onMove: handlePointerMove, onUp: handlePointerUp }
 
       document.addEventListener('pointermove', handlePointerMove)
       document.addEventListener('pointerup', handlePointerUp)
@@ -416,6 +443,7 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             aria-valuemin={min}
             aria-valuemax={max}
             aria-valuenow={actualValue[index]}
+            aria-valuetext={`${actualValue[index]} of ${max}`}
             aria-disabled={disabled}
             aria-orientation={orientation}
             onKeyDown={handleKeyDown(index)}

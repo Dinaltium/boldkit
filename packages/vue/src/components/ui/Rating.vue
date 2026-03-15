@@ -158,6 +158,7 @@ const getClipPath = (isHalfFilled: boolean) => {
     :aria-valuemin="0"
     :aria-valuemax="max"
     :aria-valuenow="currentValue"
+    :aria-valuetext="`${currentValue} out of ${max} ${icon === 'star' ? 'stars' : icon === 'heart' ? 'hearts' : 'circles'}`"
     aria-label="Rating"
     :tabindex="readOnly || disabled ? -1 : 0"
     :class="cn(

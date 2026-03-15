@@ -137,6 +137,7 @@ const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
         aria-valuemin={0}
         aria-valuemax={max}
         aria-valuenow={currentValue}
+        aria-valuetext={`${currentValue} out of ${max} ${icon === 'star' ? 'stars' : icon === 'heart' ? 'hearts' : 'circles'}`}
         aria-label="Rating"
         tabIndex={readOnly || disabled ? -1 : 0}
         onKeyDown={handleKeyDown}

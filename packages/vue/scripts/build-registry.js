@@ -71,7 +71,7 @@ const componentMeta = {
   avatar: { deps: ['reka-ui'], desc: 'An image element with fallback', files: ['Avatar', 'AvatarImage', 'AvatarFallback'] },
 
   // Charts
-  chart: { deps: ['vue-echarts', 'echarts', 'class-variance-authority'], desc: 'Chart components with neubrutalism styling', files: ['ChartContainer'], extraFiles: ['chart-utils.ts', 'chart-variants.ts'] },
+  chart: { deps: ['vue-echarts', 'echarts', 'class-variance-authority'], desc: 'Chart components with neubrutalism styling', files: ['ChartContainer', 'DonutChart', 'GaugeChart', 'RadarChart', 'RadialBarChart', 'SparklineChart'], extraFiles: ['chart-utils.ts', 'chart-variants.ts'] },
 
   // Shapes (all 35)
   shapes: { deps: [], desc: 'SVG shape components for decorative elements', isShapes: true },

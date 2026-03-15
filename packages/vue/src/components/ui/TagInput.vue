@@ -208,11 +208,16 @@ onUnmounted(() => {
 const placeholderText = computed(() => {
   return tags.value.length === 0 ? props.placeholder : ''
 })
+
+const errorId = computed(() => error.value ? 'tag-input-error' : undefined)
 </script>
 
 <template>
   <div ref="containerRef" class="relative">
     <div
+      role="group"
+      aria-label="Tag input"
+      :aria-describedby="errorId"
       @click="handleContainerClick"
       :class="
         cn(
@@ -269,7 +274,7 @@ const placeholderText = computed(() => {
     </div>
 
     <!-- Error message -->
-    <p v-if="error" class="mt-1 text-xs font-medium text-destructive">{{ error }}</p>
+    <p v-if="error" id="tag-input-error" role="alert" class="mt-1 text-xs font-medium text-destructive">{{ error }}</p>
 
     <!-- Suggestions dropdown -->
     <div

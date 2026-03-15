@@ -258,6 +258,11 @@ export * from './shapes'
 
 // Charts
 export { default as ChartContainer } from './ChartContainer.vue'
+export { default as DonutChart } from './DonutChart.vue'
+export { default as GaugeChart } from './GaugeChart.vue'
+export { default as RadarChart } from './RadarChart.vue'
+export { default as RadialBarChart } from './RadialBarChart.vue'
+export { default as SparklineChart } from './SparklineChart.vue'
 export { chartContainerVariants } from './chart-variants'
 export {
   CHART_PALETTES,
