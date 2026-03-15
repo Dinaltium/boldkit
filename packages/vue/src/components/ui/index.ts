@@ -156,6 +156,8 @@ export { default as DrawerClose } from './DrawerClose.vue'
 export { default as Sonner } from './Sonner.vue'
 
 export { default as Calendar } from './Calendar.vue'
+export { default as DateRangePicker } from './DateRangePicker.vue'
+export type { DateRange, DateRangePickerPreset } from './DateRangePicker.vue'
 
 export { default as InputOTP } from './InputOTP.vue'
 export { default as InputOTPGroup } from './InputOTPGroup.vue'
@@ -171,6 +173,61 @@ export { default as CommandGroup } from './CommandGroup.vue'
 export { default as CommandItem } from './CommandItem.vue'
 export { default as CommandSeparator } from './CommandSeparator.vue'
 export { default as CommandShortcut } from './CommandShortcut.vue'
+
+// Carousel
+export { default as Carousel } from './Carousel.vue'
+export { default as CarouselContent } from './CarouselContent.vue'
+export { default as CarouselItem } from './CarouselItem.vue'
+export { default as CarouselPrevious } from './CarouselPrevious.vue'
+export { default as CarouselNext } from './CarouselNext.vue'
+export { default as CarouselDots } from './CarouselDots.vue'
+export { CAROUSEL_INJECTION_KEY, type CarouselContext, type CarouselApi, type CarouselOptions, type CarouselPlugin } from './Carousel.vue'
+
+// Data Table
+export { default as DataTable } from './DataTable.vue'
+export type { DataTableColumn, DataTableProps } from './DataTable.vue'
+
+// Rating
+export { default as Rating } from './Rating.vue'
+
+// Sidebar
+export { default as Sidebar } from './Sidebar.vue'
+export { default as SidebarContent } from './SidebarContent.vue'
+export { default as SidebarFooter } from './SidebarFooter.vue'
+export { default as SidebarGroup } from './SidebarGroup.vue'
+export { default as SidebarGroupLabel } from './SidebarGroupLabel.vue'
+export { default as SidebarHeader } from './SidebarHeader.vue'
+export { default as SidebarInset } from './SidebarInset.vue'
+export { default as SidebarItem } from './SidebarItem.vue'
+export { default as SidebarProvider } from './SidebarProvider.vue'
+export { default as SidebarSeparator } from './SidebarSeparator.vue'
+export { default as SidebarToggle } from './SidebarToggle.vue'
+
+// Tag Input
+export { default as TagInput } from './TagInput.vue'
+
+// Time Picker
+export { default as TimePicker } from './TimePicker.vue'
+
+// Timeline
+export { default as Timeline } from './Timeline.vue'
+export { default as TimelineCard } from './TimelineCard.vue'
+export { default as TimelineConnector } from './TimelineConnector.vue'
+export { default as TimelineContent } from './TimelineContent.vue'
+export { default as TimelineDescription } from './TimelineDescription.vue'
+export { default as TimelineDot } from './TimelineDot.vue'
+export { default as TimelineHeader } from './TimelineHeader.vue'
+export { default as TimelineItem } from './TimelineItem.vue'
+export { default as TimelineTime } from './TimelineTime.vue'
+export { default as TimelineTitle } from './TimelineTitle.vue'
+
+// Tour
+export { default as Tour } from './Tour.vue'
+export type { TourStep, TourProps } from './Tour.vue'
+
+// Tree View
+export { default as TreeView } from './TreeView.vue'
+export type { TreeNode, TreeViewProps } from './TreeView.vue'
 
 // BoldKit Unique Components
 export { default as Marquee } from './Marquee.vue'

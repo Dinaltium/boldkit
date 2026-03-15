@@ -219,59 +219,54 @@
       "registryUrl": "https://boldkit.dev/r/vue/shapes.json"
     },
     {
-      "name": "spinner",
+      "name": "carousel",
       "type": "registry:ui",
-      "registryUrl": "https://boldkit.dev/r/vue/spinner.json"
+      "registryUrl": "https://boldkit.dev/r/vue/carousel.json"
     },
     {
-      "name": "kbd",
+      "name": "data-table",
       "type": "registry:ui",
-      "registryUrl": "https://boldkit.dev/r/vue/kbd.json"
+      "registryUrl": "https://boldkit.dev/r/vue/data-table.json"
     },
     {
-      "name": "stat-card",
+      "name": "date-range-picker",
       "type": "registry:ui",
-      "registryUrl": "https://boldkit.dev/r/vue/stat-card.json"
+      "registryUrl": "https://boldkit.dev/r/vue/date-range-picker.json"
     },
     {
-      "name": "stepper",
+      "name": "rating",
       "type": "registry:ui",
-      "registryUrl": "https://boldkit.dev/r/vue/stepper.json"
+      "registryUrl": "https://boldkit.dev/r/vue/rating.json"
     },
     {
-      "name": "dropzone",
+      "name": "tag-input",
       "type": "registry:ui",
-      "registryUrl": "https://boldkit.dev/r/vue/dropzone.json"
+      "registryUrl": "https://boldkit.dev/r/vue/tag-input.json"
     },
     {
-      "name": "gauge-chart",
+      "name": "time-picker",
       "type": "registry:ui",
-      "registryUrl": "https://boldkit.dev/r/vue/gauge-chart.json"
+      "registryUrl": "https://boldkit.dev/r/vue/time-picker.json"
     },
     {
-      "name": "sparkline",
+      "name": "sidebar",
       "type": "registry:ui",
-      "registryUrl": "https://boldkit.dev/r/vue/sparkline.json"
+      "registryUrl": "https://boldkit.dev/r/vue/sidebar.json"
     },
     {
-      "name": "donut-chart",
+      "name": "timeline",
       "type": "registry:ui",
-      "registryUrl": "https://boldkit.dev/r/vue/donut-chart.json"
+      "registryUrl": "https://boldkit.dev/r/vue/timeline.json"
     },
     {
-      "name": "radar-chart",
+      "name": "tour",
       "type": "registry:ui",
-      "registryUrl": "https://boldkit.dev/r/vue/radar-chart.json"
+      "registryUrl": "https://boldkit.dev/r/vue/tour.json"
     },
     {
-      "name": "radial-bar-chart",
+      "name": "tree-view",
       "type": "registry:ui",
-      "registryUrl": "https://boldkit.dev/r/vue/radial-bar-chart.json"
-    },
-    {
-      "name": "chart-utils",
-      "type": "registry:ui",
-      "registryUrl": "https://boldkit.dev/r/vue/chart-utils.json"
+      "registryUrl": "https://boldkit.dev/r/vue/tree-view.json"
     }
   ]
 }

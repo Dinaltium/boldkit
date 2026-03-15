@@ -75,6 +75,67 @@ const componentMeta = {
 
   // Shapes (all 35)
   shapes: { deps: [], desc: 'SVG shape components for decorative elements', isShapes: true },
+
+  // v2.7.0 - Data & Forms
+  carousel: {
+    deps: ['embla-carousel-vue', 'lucide-vue-next'],
+    registryDeps: ['button'],
+    desc: 'Carousel component with navigation, dots, and touch support built on Embla',
+    files: ['Carousel', 'CarouselContent', 'CarouselItem', 'CarouselPrevious', 'CarouselNext', 'CarouselDots']
+  },
+  'data-table': {
+    deps: ['@tanstack/vue-table', 'lucide-vue-next'],
+    registryDeps: ['button', 'checkbox', 'dropdown-menu', 'input', 'select', 'table'],
+    desc: 'Powerful data table with sorting, filtering, pagination, and row selection',
+    files: ['DataTable']
+  },
+  'date-range-picker': {
+    deps: ['date-fns', 'lucide-vue-next'],
+    registryDeps: ['button', 'calendar', 'popover'],
+    desc: 'Date range picker with presets, dual calendars, and customizable options',
+    files: ['DateRangePicker']
+  },
+  rating: {
+    deps: ['class-variance-authority', 'lucide-vue-next'],
+    desc: 'Star rating component with half-values, multiple icons, and keyboard navigation',
+    files: ['Rating']
+  },
+  'tag-input': {
+    deps: ['lucide-vue-next'],
+    desc: 'Multi-tag input with suggestions, validation, and keyboard support',
+    files: ['TagInput']
+  },
+  'time-picker': {
+    deps: ['lucide-vue-next'],
+    registryDeps: ['button', 'popover', 'scroll-area'],
+    desc: 'Popover-based time picker with 12h/24h format and scrollable columns',
+    files: ['TimePicker']
+  },
+
+  // v2.8.0 - Navigation & Advanced
+  sidebar: {
+    deps: ['class-variance-authority', 'lucide-vue-next'],
+    registryDeps: ['button', 'sheet', 'tooltip'],
+    desc: 'Collapsible sidebar with mobile drawer, tooltips, and keyboard shortcut',
+    files: ['Sidebar', 'SidebarContent', 'SidebarFooter', 'SidebarGroup', 'SidebarGroupLabel', 'SidebarHeader', 'SidebarInset', 'SidebarItem', 'SidebarProvider', 'SidebarSeparator', 'SidebarToggle']
+  },
+  timeline: {
+    deps: ['class-variance-authority'],
+    desc: 'Composable timeline for activity feeds, order tracking, and version history',
+    files: ['Timeline', 'TimelineCard', 'TimelineConnector', 'TimelineContent', 'TimelineDescription', 'TimelineDot', 'TimelineHeader', 'TimelineItem', 'TimelineTime', 'TimelineTitle']
+  },
+  tour: {
+    deps: ['lucide-vue-next'],
+    registryDeps: ['button'],
+    desc: 'Step-by-step product tour with spotlight highlighting and progress indicators',
+    files: ['Tour']
+  },
+  'tree-view': {
+    deps: ['reka-ui', 'lucide-vue-next'],
+    registryDeps: ['checkbox', 'collapsible'],
+    desc: 'Hierarchical tree view with expand/collapse, selection, and checkboxes',
+    files: ['TreeView']
+  },
 }
 
 const SHAPES_DIR = path.join(UI_DIR, 'shapes')
@@ -162,7 +223,7 @@ function createRegistryJson(name, meta) {
     type: 'registry:ui',
     description: meta.desc,
     dependencies: meta.deps || [],
-    registryDependencies: ['utils'],
+    registryDependencies: ['utils', ...(meta.registryDeps || [])],
     files: registryFiles
   }
 }
