@@ -57,6 +57,9 @@ const totalSteps = computed(() => props.steps.length)
 
 // Get element from target
 function getTargetElement(target: TourStep['target']): HTMLElement | null {
+  // SSR guard
+  if (typeof document === 'undefined') return null
+
   if (typeof target === 'string') {
     if (target === 'center') return null
     return document.querySelector(target)
@@ -75,6 +78,9 @@ function calculatePosition(
   placement: TourStep['placement'] = 'bottom',
   padding: number = 16
 ): { top: number; left: number } {
+  // SSR guard
+  if (typeof window === 'undefined') return { top: 0, left: 0 }
+
   const viewport = {
     width: window.innerWidth,
     height: window.innerHeight,
@@ -155,6 +161,8 @@ function updateTargetRect() {
 // Update popover position
 async function updatePopoverPosition() {
   await nextTick()
+  // SSR guard
+  if (typeof window === 'undefined') return
   if (!popoverRef.value) return
 
   const popoverRect = popoverRef.value.getBoundingClientRect()

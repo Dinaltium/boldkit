@@ -40,6 +40,40 @@ export default function Example() {
   )
 }`
 
+const vueSourceCode = `<script setup lang="ts">
+import { provide, ref, computed, onMounted } from 'vue'
+import emblaCarouselVue from 'embla-carousel-vue'
+import type { EmblaOptionsType, EmblaPluginType } from 'embla-carousel'
+import { cn } from '@/lib/utils'
+
+interface CarouselProps {
+  opts?: EmblaOptionsType
+  plugins?: EmblaPluginType[]
+  orientation?: 'horizontal' | 'vertical'
+  class?: string
+}
+
+const props = withDefaults(defineProps<CarouselProps>(), {
+  orientation: 'horizontal',
+})
+
+const [emblaRef, emblaApi] = emblaCarouselVue(
+  computed(() => ({ ...props.opts, axis: props.orientation === 'horizontal' ? 'x' : 'y' })),
+  props.plugins ? () => props.plugins! : undefined
+)
+
+// Provide context for sub-components
+provide('carousel', { emblaRef, emblaApi, orientation: props.orientation })
+</script>
+
+<template>
+  <div :class="cn('relative', props.class)" role="region" aria-roledescription="carousel">
+    <slot />
+  </div>
+</template>
+
+<!-- Sub-components: CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, CarouselDots -->`
+
 const vueUsageCode = `<script setup lang="ts">
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel'
 </script>
@@ -68,6 +102,7 @@ export function CarouselDoc() {
         vueDependencies={['embla-carousel-vue', 'lucide-vue-next']}
         sourceCode={sourceCode}
         usageCode={usageCode}
+        vueSourceCode={vueSourceCode}
         vueUsageCode={vueUsageCode}
       >
         <div className="w-full max-w-xs mx-auto">

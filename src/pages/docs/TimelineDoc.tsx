@@ -54,6 +54,33 @@ export default function Example() {
   )
 }`
 
+const vueSourceCode = `<script setup lang="ts">
+import { provide, inject, computed } from 'vue'
+import { cva, type VariantProps } from 'class-variance-authority'
+import { cn } from '@/lib/utils'
+
+// Timeline Context
+const TimelineContext = Symbol('timeline')
+
+interface TimelineProps {
+  orientation?: 'vertical' | 'horizontal'
+  class?: string
+}
+
+const props = withDefaults(defineProps<TimelineProps>(), { orientation: 'vertical' })
+
+provide(TimelineContext, { orientation: props.orientation })
+</script>
+
+<template>
+  <div :class="cn('relative flex', orientation === 'vertical' ? 'flex-col' : 'flex-row', props.class)">
+    <slot />
+  </div>
+</template>
+
+<!-- Sub-components: TimelineItem, TimelineDot, TimelineConnector, TimelineContent,
+     TimelineHeader, TimelineTitle, TimelineDescription, TimelineTime, TimelineCard -->`
+
 const vueUsageCode = `<script setup lang="ts">
 import { Timeline, TimelineItem, TimelineDot, TimelineConnector, TimelineContent, TimelineTitle, TimelineDescription } from '@/components/ui/timeline'
 </script>
@@ -82,6 +109,7 @@ export function TimelineDoc() {
         vueDependencies={['class-variance-authority']}
         sourceCode={sourceCode}
         usageCode={usageCode}
+        vueSourceCode={vueSourceCode}
         vueUsageCode={vueUsageCode}
       >
         <Timeline>

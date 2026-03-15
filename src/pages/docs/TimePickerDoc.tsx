@@ -35,6 +35,55 @@ export default function Example() {
   return <TimePicker />
 }`
 
+const vueSourceCode = `<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { Clock } from 'lucide-vue-next'
+import { cn } from '@/lib/utils'
+import Button from './Button.vue'
+import { Popover, PopoverTrigger, PopoverContent } from './popover'
+import { ScrollArea } from './scroll-area'
+
+interface Props {
+  modelValue?: Date
+  defaultValue?: Date
+  format?: '12h' | '24h'
+  minuteStep?: 1 | 5 | 10 | 15 | 30
+  showSeconds?: boolean
+  minTime?: Date
+  maxTime?: Date
+  disabled?: boolean
+  placeholder?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  format: '12h', minuteStep: 1, showSeconds: false, placeholder: 'Select time',
+})
+const emit = defineEmits<{ 'update:modelValue': [value: Date | undefined] }>()
+
+const open = ref(false)
+const hours = computed(() => props.format === '12h' ? 12 : 24)
+const hoursArray = computed(() => Array.from({ length: hours.value }, (_, i) => props.format === '12h' ? i + 1 : i))
+const minutesArray = computed(() => Array.from({ length: 60 / props.minuteStep }, (_, i) => i * props.minuteStep))
+</script>
+
+<template>
+  <Popover v-model:open="open">
+    <PopoverTrigger>
+      <Button variant="outline" :disabled="disabled">
+        <Clock class="mr-2 h-4 w-4" />
+        {{ modelValue ? formatTime(modelValue) : placeholder }}
+      </Button>
+    </PopoverTrigger>
+    <PopoverContent class="w-auto p-0">
+      <div class="flex">
+        <ScrollArea v-for="col in columns" :key="col" class="h-[200px]">
+          <!-- Time selection columns -->
+        </ScrollArea>
+      </div>
+    </PopoverContent>
+  </Popover>
+</template>`
+
 const vueUsageCode = `<script setup lang="ts">
 import { ref } from 'vue'
 import { TimePicker } from '@/components/ui/time-picker'
@@ -59,6 +108,7 @@ export function TimePickerDoc() {
         vueDependencies={['reka-ui', 'lucide-vue-next']}
         sourceCode={sourceCode}
         usageCode={usageCode}
+        vueSourceCode={vueSourceCode}
         vueUsageCode={vueUsageCode}
       >
         <div className="max-w-xs">

@@ -160,6 +160,8 @@ const minValue = computed(() => (props.minDate ? dateToCalendarDate(props.minDat
 const maxValue = computed(() => (props.maxDate ? dateToCalendarDate(props.maxDate) : undefined))
 
 const checkMobile = () => {
+  // SSR guard
+  if (typeof window === 'undefined') return
   isMobile.value = window.innerWidth < 640
 }
 

@@ -102,6 +102,57 @@ export default function Example() {
   return <DataTable columns={columns} data={data} />
 }`
 
+const vueSourceCode = `<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { FlexRender, getCoreRowModel, useVueTable } from '@tanstack/vue-table'
+import type { ColumnDef, SortingState, ColumnFiltersState } from '@tanstack/vue-table'
+import { cn } from '@/lib/utils'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+
+interface Props<TData> {
+  columns: ColumnDef<TData>[]
+  data: TData[]
+  enableSorting?: boolean
+  enableFiltering?: boolean
+  enablePagination?: boolean
+  filterColumn?: string
+  filterPlaceholder?: string
+}
+
+const props = defineProps<Props<any>>()
+
+const sorting = ref<SortingState>([])
+const columnFilters = ref<ColumnFiltersState>([])
+
+const table = useVueTable({
+  data: props.data,
+  columns: props.columns,
+  getCoreRowModel: getCoreRowModel(),
+  // ... additional features
+})
+</script>
+
+<template>
+  <div class="space-y-4">
+    <Table>
+      <TableHeader>
+        <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
+          <TableHead v-for="header in headerGroup.headers" :key="header.id">
+            <FlexRender :render="header.column.columnDef.header" :props="header.getContext()" />
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow v-for="row in table.getRowModel().rows" :key="row.id">
+          <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
+            <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
+          </TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+  </div>
+</template>`
+
 const vueUsageCode = `<script setup lang="ts">
 import { DataTable } from '@/components/ui/data-table'
 
@@ -127,6 +178,7 @@ export function DataTableDoc() {
         vueDependencies={['@tanstack/vue-table', 'lucide-vue-next']}
         sourceCode={sourceCode}
         usageCode={usageCode}
+        vueSourceCode={vueSourceCode}
         vueUsageCode={vueUsageCode}
       >
         <DataTable columns={columns} data={users.slice(0, 5)} />

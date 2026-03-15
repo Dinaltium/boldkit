@@ -115,6 +115,70 @@ export default function Example() {
   return <TreeView data={data} />
 }`
 
+const vueSourceCode = `<script setup lang="ts">
+import { ref, computed, provide, inject } from 'vue'
+import { ChevronRight, Folder, File } from 'lucide-vue-next'
+import { cn } from '@/lib/utils'
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from './collapsible'
+import Checkbox from './Checkbox.vue'
+
+interface TreeNode {
+  id: string
+  label: string
+  icon?: Component
+  children?: TreeNode[]
+  disabled?: boolean
+}
+
+interface Props {
+  data: TreeNode[]
+  expandedIds?: string[]
+  selectedIds?: string[]
+  selectionMode?: 'none' | 'single' | 'multiple'
+  showCheckboxes?: boolean
+  showIcons?: boolean
+  defaultExpandedIds?: string[]
+  defaultSelectedIds?: string[]
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  selectionMode: 'none',
+  showCheckboxes: false,
+  showIcons: true,
+  defaultExpandedIds: () => [],
+  defaultSelectedIds: () => [],
+})
+
+const emit = defineEmits<{
+  'update:expandedIds': [value: string[]]
+  'update:selectedIds': [value: string[]]
+}>()
+
+const internalExpanded = ref<string[]>(props.defaultExpandedIds)
+const internalSelected = ref<string[]>(props.defaultSelectedIds)
+
+const expanded = computed(() => props.expandedIds ?? internalExpanded.value)
+const selected = computed(() => props.selectedIds ?? internalSelected.value)
+</script>
+
+<template>
+  <div role="tree" class="select-none">
+    <TreeNode
+      v-for="node in data"
+      :key="node.id"
+      :node="node"
+      :level="0"
+      :expanded="expanded"
+      :selected="selected"
+      :selection-mode="selectionMode"
+      :show-checkboxes="showCheckboxes"
+      :show-icons="showIcons"
+      @toggle-expand="toggleExpand"
+      @toggle-select="toggleSelect"
+    />
+  </div>
+</template>`
+
 const vueUsageCode = `<script setup lang="ts">
 import { TreeView } from '@/components/ui/tree-view'
 
@@ -147,6 +211,7 @@ export function TreeViewDoc() {
         vueDependencies={['reka-ui', 'lucide-vue-next']}
         sourceCode={sourceCode}
         usageCode={usageCode}
+        vueSourceCode={vueSourceCode}
         vueUsageCode={vueUsageCode}
       >
         <div className="max-w-sm">

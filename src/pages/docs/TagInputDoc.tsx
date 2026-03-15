@@ -32,6 +32,50 @@ export default function Example() {
   return <TagInput placeholder="Add tags..." />
 }`
 
+const vueSourceCode = `<script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { cn } from '@/lib/utils'
+import { X } from 'lucide-vue-next'
+
+interface Props {
+  modelValue?: string[]
+  defaultValue?: string[]
+  suggestions?: string[]
+  maxTags?: number
+  allowDuplicates?: boolean
+  delimiter?: string
+  validateTag?: (tag: string) => boolean | string
+  placeholder?: string
+  disabled?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  defaultValue: () => [], suggestions: () => [], allowDuplicates: false, delimiter: ',', placeholder: 'Add tag...',
+})
+const emit = defineEmits<{ 'update:modelValue': [value: string[]] }>()
+
+const inputValue = ref('')
+const showSuggestions = ref(false)
+const error = ref<string | null>(null)
+
+const tags = computed(() => props.modelValue ?? internalTags.value)
+const filteredSuggestions = computed(() =>
+  props.suggestions.filter(s => s.toLowerCase().includes(inputValue.value.toLowerCase()))
+)
+</script>
+
+<template>
+  <div class="relative">
+    <div :class="cn('flex flex-wrap items-center gap-2 min-h-11 border-3 border-input bg-background px-3 py-2')">
+      <span v-for="(tag, i) in tags" :key="tag" class="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-bold border-2 border-foreground bg-primary text-primary-foreground">
+        {{ tag }}
+        <button @click="removeTag(i)"><X class="h-3 w-3" /></button>
+      </span>
+      <input v-model="inputValue" @keydown="handleKeyDown" :placeholder="tags.length === 0 ? placeholder : ''" />
+    </div>
+  </div>
+</template>`
+
 const vueUsageCode = `<script setup lang="ts">
 import { ref } from 'vue'
 import { TagInput } from '@/components/ui/tag-input'
@@ -61,6 +105,7 @@ export function TagInputDoc() {
         vueDependencies={['lucide-vue-next']}
         sourceCode={sourceCode}
         usageCode={usageCode}
+        vueSourceCode={vueSourceCode}
         vueUsageCode={vueUsageCode}
       >
         <div className="max-w-md">
