@@ -29,6 +29,10 @@ export interface ChartContainerProps
     VariantProps<typeof chartContainerVariants> {
   config: ChartConfig
   children: React.ComponentProps<typeof RechartsPrimitive.ResponsiveContainer>['children']
+  /** Accessible label for the chart (required for screen readers) */
+  'aria-label'?: string
+  /** ID of element that labels this chart */
+  'aria-labelledby'?: string
 }
 
 export function ChartContainer({
@@ -37,6 +41,8 @@ export function ChartContainer({
   children,
   config,
   variant,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
   ...props
 }: ChartContainerProps) {
   const uniqueId = React.useId()
@@ -45,6 +51,9 @@ export function ChartContainer({
   return (
     <ChartContext.Provider value={{ config }}>
       <div
+        role="img"
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledby}
         data-slot="chart"
         data-chart={chartId}
         className={cn(chartContainerVariants({ variant }), className)}
