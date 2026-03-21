@@ -110,6 +110,7 @@ export function RadialBarChartDoc() {
     <>
       <ComponentDoc
         name="RadialBarChart"
+        registryName="radial-bar-chart"
         description="Circular progress bars with nested rings for displaying multiple metrics."
         dependencies={['recharts']}
         vueDependencies={['vue-echarts', 'echarts']}

@@ -134,6 +134,7 @@ export function GaugeChartDoc() {
     <>
       <ComponentDoc
         name="GaugeChart"
+        registryName="gauge-chart"
         description="Speedometer-style gauge chart with color zones and animated needle."
         dependencies={['class-variance-authority']}
         vueDependencies={['class-variance-authority']}

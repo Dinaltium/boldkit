@@ -145,6 +145,7 @@ export function StatCardDoc() {
     <>
       <ComponentDoc
         name="StatCard"
+        registryName="stat-card"
         description="Display key metrics and statistics with trend indicators and progress bars."
         dependencies={['class-variance-authority', 'lucide-react']}
         vueDependencies={['class-variance-authority', 'lucide-vue-next']}

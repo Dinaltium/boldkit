@@ -134,6 +134,7 @@ export function DonutChartDoc() {
     <>
       <ComponentDoc
         name="DonutChart"
+        registryName="donut-chart"
         description="Pie chart with center hole for displaying KPIs and totals."
         dependencies={['recharts']}
         vueDependencies={['vue-echarts', 'echarts']}

@@ -134,6 +134,7 @@ export function RadarChartDoc() {
     <>
       <ComponentDoc
         name="RadarChart"
+        registryName="radar-chart"
         description="Multi-variable comparison chart for skills, metrics, and feature comparisons."
         dependencies={['recharts']}
         vueDependencies={['vue-echarts', 'echarts']}

@@ -14,8 +14,8 @@ import { SEO, getComponentSEO } from '@/components/SEO'
 import { useFramework, ReactIcon, VueIcon } from '@/hooks/use-framework'
 import { Plus, Upload, Search, Inbox } from 'lucide-react'
 
-const reactInstallCode = `npx shadcn@latest add "https://boldkit.tech/r/empty-state.json"`
-const vueInstallCode = `npx shadcn-vue@latest add "https://boldkit.tech/r/vue/empty-state.json"`
+const reactInstallCode = `npx shadcn@latest add "https://boldkit.dev/r/empty-state.json"`
+const vueInstallCode = `npx shadcn-vue@latest add "https://boldkit.dev/r/vue/empty-state.json"`
 
 const reactUsageCode = `import {
   EmptyState,
