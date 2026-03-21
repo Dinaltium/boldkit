@@ -1220,3 +1220,22 @@ body {
     box-shadow: 3px 3px 0px hsl(var(--primary));
   }
 }
+
+/* ==========================================
+   MARQUEE ANIMATION (Landing Page)
+   ========================================== */
+
+@keyframes bk-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.animate-bk-marquee {
+  animation: bk-marquee 28s linear infinite;
+  display: flex;
+  width: max-content;
+}
+
+.animate-bk-marquee:hover {
+  animation-play-state: paused;
+}
