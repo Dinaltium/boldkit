@@ -80,13 +80,13 @@ export function Home() {
                 <div className="mb-6 select-none">
                   <div
                     className="leading-none text-primary"
-                    style={{ ...DISPLAY, fontSize: 'clamp(72px, 14vw, 180px)', lineHeight: 0.88 }}
+                    style={{ ...DISPLAY, fontSize: 'clamp(56px, 14vw, 180px)', lineHeight: 0.88 }}
                   >
                     BOLD
                   </div>
                   <div
                     className="leading-none bk-text-outline-thick"
-                    style={{ ...DISPLAY, fontSize: 'clamp(72px, 14vw, 180px)', lineHeight: 0.88 }}
+                    style={{ ...DISPLAY, fontSize: 'clamp(56px, 14vw, 180px)', lineHeight: 0.88 }}
                   >
                     KIT
                   </div>
@@ -108,14 +108,14 @@ export function Home() {
                 </p>
 
                 {/* CTAs */}
-                <div className="mb-8 flex flex-wrap gap-3">
-                  <Link to="/docs">
-                    <Button size="lg" className="gap-2">
+                <div className="mb-8 flex flex-col sm:flex-row gap-3">
+                  <Link to="/docs" className="w-full sm:w-auto">
+                    <Button size="lg" className="w-full sm:w-auto gap-2">
                       Get Started <ArrowRight className="h-4 w-4" />
                     </Button>
                   </Link>
-                  <Link to="/components">
-                    <Button size="lg" variant="outline">Browse Components</Button>
+                  <Link to="/components" className="w-full sm:w-auto">
+                    <Button size="lg" variant="outline" className="w-full sm:w-auto">Browse Components</Button>
                   </Link>
                 </div>
 
@@ -273,19 +273,15 @@ export function Home() {
         <section className="border-b-3 border-foreground">
           <div className="grid grid-cols-2 md:grid-cols-4">
             {[
-              { number: '50+', label: 'Components', bg: 'bg-primary',   icon: <Package className="h-5 w-5" />, right: true },
-              { number: '10',  label: 'Chart Types', bg: 'bg-secondary', icon: <BarChart3 className="h-5 w-5" />, right: true },
-              { number: '45',  label: 'SVG Shapes',  bg: 'bg-accent',   icon: <Sparkles className="h-5 w-5" />, right: true },
-              { number: '15',  label: 'Blocks',      bg: 'bg-success',  icon: <LayoutGrid className="h-5 w-5" />, right: false },
-            ].map((stat, i) => (
+              // borders: [mobile-right, mobile-bottom, desktop-right]
+              { number: '50+', label: 'Components', bg: 'bg-primary',   icon: <Package className="h-5 w-5" />,   borders: 'border-r-3 border-b-3 md:border-b-0 border-foreground' },
+              { number: '10',  label: 'Chart Types', bg: 'bg-secondary', icon: <BarChart3 className="h-5 w-5" />, borders: 'border-b-3 md:border-b-0 md:border-r-3 border-foreground' },
+              { number: '45',  label: 'SVG Shapes',  bg: 'bg-accent',   icon: <Sparkles className="h-5 w-5" />,  borders: 'border-r-3 md:border-r-3 border-foreground' },
+              { number: '15',  label: 'Blocks',      bg: 'bg-success',  icon: <LayoutGrid className="h-5 w-5" />, borders: '' },
+            ].map((stat) => (
               <div
                 key={stat.label}
-                className={[
-                  stat.bg,
-                  'p-8 md:p-10 flex flex-col gap-1',
-                  stat.right ? 'border-r-3 border-foreground' : '',
-                  i < 2 ? 'border-b-3 md:border-b-0 border-foreground' : '',
-                ].join(' ')}
+                className={`${stat.bg} ${stat.borders} p-6 md:p-10 flex flex-col gap-1`}
               >
                 <div className="mb-1 flex items-center gap-2">
                   {stat.icon}
@@ -293,7 +289,7 @@ export function Home() {
                 </div>
                 <div
                   className="font-black leading-none"
-                  style={{ ...DISPLAY, fontSize: 'clamp(48px, 7vw, 96px)' }}
+                  style={{ ...DISPLAY, fontSize: 'clamp(40px, 7vw, 96px)' }}
                 >
                   {stat.number}
                 </div>
@@ -303,10 +299,10 @@ export function Home() {
         </section>
 
         {/* ── COMPONENT SHOWCASE ────────────────────────────────────── */}
-        <section className="border-b-3 border-foreground py-20">
+        <section className="border-b-3 border-foreground py-14 md:py-20">
           <div className="container mx-auto px-4">
 
-            <div className="mb-12 flex items-end justify-between">
+            <div className="mb-8 md:mb-12 flex items-end justify-between">
               <div>
                 <Badge variant="outline" className="mb-3">Live Preview</Badge>
                 <h2
@@ -321,10 +317,10 @@ export function Home() {
               </Link>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 
               {/* Buttons — spans 2 cols */}
-              <Card className="lg:col-span-2">
+              <Card className="md:col-span-2 lg:col-span-2">
                 <CardHeader className="border-b-3 border-foreground bg-muted">
                   <CardTitle style={MONO}>Buttons</CardTitle>
                 </CardHeader>
@@ -412,7 +408,7 @@ export function Home() {
               </Card>
 
               {/* Stat Cards — spans 2 cols */}
-              <Card className="lg:col-span-2">
+              <Card className="md:col-span-2 lg:col-span-2">
                 <CardHeader className="border-b-3 border-foreground bg-success">
                   <CardTitle className="flex items-center gap-2" style={MONO}>
                     Stat Cards <Badge variant="accent" className="text-[10px]">New</Badge>
@@ -448,7 +444,7 @@ export function Home() {
               </Card>
 
               {/* Stickers — full width */}
-              <Card className="lg:col-span-3">
+              <Card className="md:col-span-2 lg:col-span-3">
                 <CardHeader className="border-b-3 border-foreground bg-warning">
                   <CardTitle style={MONO}>Stickers & Stamps</CardTitle>
                 </CardHeader>
@@ -478,10 +474,10 @@ export function Home() {
         </section>
 
         {/* ── FEATURES ──────────────────────────────────────────────── */}
-        <section className="border-b-3 border-foreground py-20">
+        <section className="border-b-3 border-foreground py-14 md:py-20">
           <div className="container mx-auto px-4">
 
-            <div className="mb-12">
+            <div className="mb-8 md:mb-12">
               <Badge variant="outline" className="mb-3">Why BoldKit</Badge>
               <h2
                 className="leading-none"
@@ -563,7 +559,7 @@ export function Home() {
                 </CardContent>
               </Card>
 
-              <Card interactive>
+              <Card interactive className="md:col-span-2 lg:col-span-1">
                 <CardHeader className="border-b-3 border-foreground bg-warning">
                   <Smartphone className="h-8 w-8 stroke-[3]" />
                   <CardTitle>Accessible & Mobile</CardTitle>
@@ -580,7 +576,7 @@ export function Home() {
         </section>
 
         {/* ── BLOCKS SECTION ────────────────────────────────────────── */}
-        <section className="relative overflow-hidden border-b-3 border-foreground bg-accent py-20">
+        <section className="relative overflow-hidden border-b-3 border-foreground bg-accent py-14 md:py-20">
           <div className="grid-pattern absolute inset-0 opacity-20" />
           <div className="container relative mx-auto px-4">
 
@@ -652,7 +648,7 @@ export function Home() {
             </div>
 
             {/* Block preview strip */}
-            <div className="mt-8 grid max-w-2xl grid-cols-5 gap-3">
+            <div className="mt-8 grid max-w-2xl grid-cols-3 sm:grid-cols-5 gap-3">
               {[
                 { name: 'Hero',     color: 'bg-primary'   },
                 { name: 'Features', color: 'bg-info'      },
@@ -675,7 +671,7 @@ export function Home() {
         </section>
 
         {/* ── FINAL CTA ─────────────────────────────────────────────── */}
-        <section className="relative overflow-hidden bg-foreground py-28">
+        <section className="relative overflow-hidden bg-foreground py-20 md:py-28">
           <div className="grid-pattern absolute inset-0 opacity-10" />
           <div className="container relative mx-auto px-4 text-center">
             <div
@@ -689,14 +685,14 @@ export function Home() {
               Free, open-source, and ready for production.<br />Start building in seconds.
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link to="/docs/installation">
-                <Button size="lg">Get Started</Button>
+              <Link to="/docs/installation" className="w-full sm:w-auto">
+                <Button size="lg" className="w-full sm:w-auto">Get Started</Button>
               </Link>
-              <a href="https://github.com/ANIBIT14/boldkit" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/ANIBIT14/boldkit" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
                 <Button
                   size="lg"
                   variant="outline"
-                  className="gap-2 bg-transparent border-background text-background hover:bg-background/10"
+                  className="w-full sm:w-auto gap-2 bg-transparent border-background text-background hover:bg-background/10"
                 >
                   <Github className="h-4 w-4" /> Star on GitHub
                 </Button>
