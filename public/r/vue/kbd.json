@@ -2,11 +2,8 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "kbd",
   "type": "registry:ui",
-  "description": "Keyboard key display component with neubrutalism styling for showing keyboard shortcuts",
-  "dependencies": [
-    "reka-ui",
-    "class-variance-authority"
-  ],
+  "description": "Keyboard shortcut display component",
+  "dependencies": [],
   "registryDependencies": [
     "utils"
   ],

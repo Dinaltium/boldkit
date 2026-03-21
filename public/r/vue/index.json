@@ -267,6 +267,36 @@
       "name": "tree-view",
       "type": "registry:ui",
       "registryUrl": "https://boldkit.dev/r/vue/tree-view.json"
+    },
+    {
+      "name": "dropzone",
+      "type": "registry:ui",
+      "registryUrl": "https://boldkit.dev/r/vue/dropzone.json"
+    },
+    {
+      "name": "empty-state",
+      "type": "registry:ui",
+      "registryUrl": "https://boldkit.dev/r/vue/empty-state.json"
+    },
+    {
+      "name": "kbd",
+      "type": "registry:ui",
+      "registryUrl": "https://boldkit.dev/r/vue/kbd.json"
+    },
+    {
+      "name": "spinner",
+      "type": "registry:ui",
+      "registryUrl": "https://boldkit.dev/r/vue/spinner.json"
+    },
+    {
+      "name": "stat-card",
+      "type": "registry:ui",
+      "registryUrl": "https://boldkit.dev/r/vue/stat-card.json"
+    },
+    {
+      "name": "stepper",
+      "type": "registry:ui",
+      "registryUrl": "https://boldkit.dev/r/vue/stepper.json"
     }
   ]
 }

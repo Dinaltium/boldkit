@@ -1,0 +1,51 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty-state",
+  "type": "registry:ui",
+  "description": "Empty state placeholders with presets for common scenarios",
+  "dependencies": [
+    "lucide-vue-next",
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "utils"
+  ],
+  "files": [
+    {
+      "path": "registry/default/ui/EmptyState.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cva, type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\n\nconst emptyStateVariants = cva(\n  'flex flex-col items-center justify-center text-center',\n  {\n    variants: {\n      variant: {\n        default: '',\n        filled: 'bg-muted/50 rounded-none p-8',\n        card: 'bg-card border-3 border-foreground shadow-[4px_4px_0px_hsl(var(--shadow-color))] p-8',\n      },\n      size: {\n        sm: 'py-6 gap-2',\n        md: 'py-8 gap-3',\n        lg: 'py-12 gap-4',\n      },\n    },\n    defaultVariants: {\n      variant: 'default',\n      size: 'md',\n    },\n  }\n)\n\ntype EmptyStateVariants = VariantProps<typeof emptyStateVariants>\n\ninterface EmptyStateProps {\n  variant?: EmptyStateVariants['variant']\n  size?: EmptyStateVariants['size']\n  class?: string\n}\n\nconst props = withDefaults(defineProps<EmptyStateProps>(), {\n  variant: 'default',\n  size: 'md',\n})\n</script>\n\n<template>\n  <div :class=\"cn(emptyStateVariants({ variant, size }), props.class)\">\n    <slot />\n  </div>\n</template>\n",
+      "type": "registry:ui",
+      "target": "components/ui/EmptyState.vue"
+    },
+    {
+      "path": "registry/default/ui/EmptyStateActions.vue",
+      "content": "<script setup lang=\"ts\">\nimport { cn } from '@/lib/utils'\n\ninterface EmptyStateActionsProps {\n  class?: string\n}\n\nconst props = defineProps<EmptyStateActionsProps>()\n</script>\n\n<template>\n  <div :class=\"cn('mt-4 flex flex-wrap gap-2 justify-center', props.class)\">\n    <slot />\n  </div>\n</template>\n",
+      "type": "registry:ui",
+      "target": "components/ui/EmptyStateActions.vue"
+    },
+    {
+      "path": "registry/default/ui/EmptyStateDescription.vue",
+      "content": "<script setup lang=\"ts\">\nimport { cn } from '@/lib/utils'\n\ninterface EmptyStateDescriptionProps {\n  class?: string\n}\n\nconst props = defineProps<EmptyStateDescriptionProps>()\n</script>\n\n<template>\n  <p :class=\"cn('text-sm text-muted-foreground max-w-sm', props.class)\">\n    <slot />\n  </p>\n</template>\n",
+      "type": "registry:ui",
+      "target": "components/ui/EmptyStateDescription.vue"
+    },
+    {
+      "path": "registry/default/ui/EmptyStateIcon.vue",
+      "content": "<script setup lang=\"ts\">\nimport { cva, type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\n\nconst iconContainerVariants = cva(\n  'flex items-center justify-center rounded-none border-3 border-foreground mb-4',\n  {\n    variants: {\n      iconColor: {\n        default: 'bg-muted text-muted-foreground',\n        primary: 'bg-primary text-primary-foreground',\n        secondary: 'bg-secondary text-secondary-foreground',\n        accent: 'bg-accent text-accent-foreground',\n        muted: 'bg-muted/50 text-muted-foreground border-muted-foreground/50',\n      },\n      size: {\n        sm: 'p-3',\n        md: 'p-4',\n        lg: 'p-5',\n      },\n    },\n    defaultVariants: {\n      iconColor: 'default',\n      size: 'md',\n    },\n  }\n)\n\ntype IconContainerVariants = VariantProps<typeof iconContainerVariants>\n\ninterface EmptyStateIconProps {\n  iconColor?: IconContainerVariants['iconColor']\n  size?: IconContainerVariants['size']\n  class?: string\n}\n\nconst props = withDefaults(defineProps<EmptyStateIconProps>(), {\n  iconColor: 'default',\n  size: 'md',\n})\n</script>\n\n<template>\n  <div :class=\"cn(iconContainerVariants({ iconColor, size }), props.class)\">\n    <slot />\n  </div>\n</template>\n",
+      "type": "registry:ui",
+      "target": "components/ui/EmptyStateIcon.vue"
+    },
+    {
+      "path": "registry/default/ui/EmptyStatePreset.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, h, type Component } from 'vue'\nimport { cva, type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\nimport {\n  Search,\n  Database,\n  Inbox,\n  FolderOpen,\n  Users,\n  ShoppingCart,\n  Bell,\n  Image,\n} from 'lucide-vue-next'\nimport EmptyState from './EmptyState.vue'\nimport EmptyStateIcon from './EmptyStateIcon.vue'\nimport EmptyStateTitle from './EmptyStateTitle.vue'\nimport EmptyStateDescription from './EmptyStateDescription.vue'\nimport EmptyStateActions from './EmptyStateActions.vue'\n\nconst emptyStateVariants = cva(\n  'flex flex-col items-center justify-center text-center',\n  {\n    variants: {\n      variant: {\n        default: '',\n        filled: 'bg-muted/50 rounded-none p-8',\n        card: 'bg-card border-3 border-foreground shadow-[4px_4px_0px_hsl(var(--shadow-color))] p-8',\n      },\n      size: {\n        sm: 'py-6 gap-2',\n        md: 'py-8 gap-3',\n        lg: 'py-12 gap-4',\n      },\n    },\n    defaultVariants: {\n      variant: 'default',\n      size: 'md',\n    },\n  }\n)\n\nconst iconContainerVariants = cva(\n  'flex items-center justify-center rounded-none border-3 border-foreground mb-4',\n  {\n    variants: {\n      iconColor: {\n        default: 'bg-muted text-muted-foreground',\n        primary: 'bg-primary text-primary-foreground',\n        secondary: 'bg-secondary text-secondary-foreground',\n        accent: 'bg-accent text-accent-foreground',\n        muted: 'bg-muted/50 text-muted-foreground border-muted-foreground/50',\n      },\n      size: {\n        sm: 'p-3',\n        md: 'p-4',\n        lg: 'p-5',\n      },\n    },\n    defaultVariants: {\n      iconColor: 'default',\n      size: 'md',\n    },\n  }\n)\n\ntype EmptyStateVariants = VariantProps<typeof emptyStateVariants>\ntype IconContainerVariants = VariantProps<typeof iconContainerVariants>\n\ntype PresetType =\n  | 'no-results'\n  | 'no-data'\n  | 'empty-inbox'\n  | 'empty-folder'\n  | 'no-users'\n  | 'empty-cart'\n  | 'no-notifications'\n  | 'no-images'\n\ninterface PresetConfig {\n  icon: Component\n  title: string\n  description: string\n}\n\nconst presets: Record<PresetType, PresetConfig> = {\n  'no-results': {\n    icon: Search,\n    title: 'No results found',\n    description: 'Try adjusting your search or filter to find what you\\'re looking for.',\n  },\n  'no-data': {\n    icon: Database,\n    title: 'No data yet',\n    description: 'Get started by adding your first item.',\n  },\n  'empty-inbox': {\n    icon: Inbox,\n    title: 'Your inbox is empty',\n    description: 'Messages you receive will appear here.',\n  },\n  'empty-folder': {\n    icon: FolderOpen,\n    title: 'This folder is empty',\n    description: 'Upload files or create new content to fill this space.',\n  },\n  'no-users': {\n    icon: Users,\n    title: 'No users found',\n    description: 'Invite team members to collaborate.',\n  },\n  'empty-cart': {\n    icon: ShoppingCart,\n    title: 'Your cart is empty',\n    description: 'Browse our products and add items to your cart.',\n  },\n  'no-notifications': {\n    icon: Bell,\n    title: 'All caught up!',\n    description: 'You have no new notifications.',\n  },\n  'no-images': {\n    icon: Image,\n    title: 'No images yet',\n    description: 'Upload images to display them here.',\n  },\n}\n\ninterface EmptyStatePresetProps {\n  preset: PresetType\n  variant?: EmptyStateVariants['variant']\n  size?: EmptyStateVariants['size']\n  iconColor?: IconContainerVariants['iconColor']\n  class?: string\n}\n\nconst props = withDefaults(defineProps<EmptyStatePresetProps>(), {\n  variant: 'default',\n  size: 'md',\n  iconColor: 'default',\n})\n\nconst config = computed(() => presets[props.preset])\n\nconst iconSizeClass = computed(() => {\n  const sizes = {\n    sm: 'h-8 w-8',\n    md: 'h-10 w-10',\n    lg: 'h-12 w-12',\n  }\n  return sizes[props.size || 'md']\n})\n</script>\n\n<template>\n  <EmptyState :variant=\"variant\" :size=\"size\" :class=\"props.class\">\n    <EmptyStateIcon :icon-color=\"iconColor\" :size=\"size\">\n      <component :is=\"config.icon\" :class=\"iconSizeClass\" />\n    </EmptyStateIcon>\n    <EmptyStateTitle>{{ config.title }}</EmptyStateTitle>\n    <EmptyStateDescription>{{ config.description }}</EmptyStateDescription>\n    <EmptyStateActions v-if=\"$slots.action\">\n      <slot name=\"action\" />\n    </EmptyStateActions>\n  </EmptyState>\n</template>\n",
+      "type": "registry:ui",
+      "target": "components/ui/EmptyStatePreset.vue"
+    },
+    {
+      "path": "registry/default/ui/EmptyStateTitle.vue",
+      "content": "<script setup lang=\"ts\">\nimport { cn } from '@/lib/utils'\n\ninterface EmptyStateTitleProps {\n  class?: string\n}\n\nconst props = defineProps<EmptyStateTitleProps>()\n</script>\n\n<template>\n  <h3 :class=\"cn('text-lg font-bold uppercase tracking-tight', props.class)\">\n    <slot />\n  </h3>\n</template>\n",
+      "type": "registry:ui",
+      "target": "components/ui/EmptyStateTitle.vue"
+    }
+  ]
+}

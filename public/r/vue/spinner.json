@@ -2,9 +2,8 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "spinner",
   "type": "registry:ui",
-  "description": "A loading spinner with multiple variants including dots, bars, blocks, and brutal styles",
+  "description": "Loading spinner with multiple variants",
   "dependencies": [
-    "reka-ui",
     "class-variance-authority"
   ],
   "registryDependencies": [

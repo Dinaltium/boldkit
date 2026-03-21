@@ -2,15 +2,12 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "dropzone",
   "type": "registry:ui",
-  "description": "A drag-and-drop file upload zone with file validation and list display",
+  "description": "Drag-and-drop file upload with preview and validation",
   "dependencies": [
-    "class-variance-authority",
     "lucide-vue-next"
   ],
   "registryDependencies": [
-    "utils",
-    "progress",
-    "spinner"
+    "utils"
   ],
   "files": [
     {

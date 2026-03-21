@@ -238,36 +238,7 @@ export { default as EmptyState } from './EmptyState.vue'
 export { default as EmptyStateActions } from './EmptyStateActions.vue'
 export { default as EmptyStateDescription } from './EmptyStateDescription.vue'
 export { default as EmptyStateIcon } from './EmptyStateIcon.vue'
-export { default as EmptyStatePreset } from './EmptyStatePreset.vue'
-export { default as EmptyStateTitle } from './EmptyStateTitle.vue'
-
-// Kbd
-export { default as Kbd } from './Kbd.vue'
-export { default as KbdCombo } from './KbdCombo.vue'
-
-// Spinner
-export { default as Spinner } from './Spinner.vue'
-
-// Stat Card
-export { default as StatCard } from './StatCard.vue'
-
-// Stepper
-export { default as Stepper } from './Stepper.vue'
-export { default as StepperContent } from './StepperContent.vue'
-export { default as StepperItem } from './StepperItem.vue'
-export { default as StepperList } from './StepperList.vue'
-export { default as StepperSeparator } from './StepperSeparator.vue'
-export { default as StepperTrigger } from './StepperTrigger.vue'
-
-// Dropzone
-export { default as Dropzone } from './Dropzone.vue'
-export { default as FileList } from './FileList.vue'
-
-// Empty State
-export { default as EmptyState } from './EmptyState.vue'
-export { default as EmptyStateActions } from './EmptyStateActions.vue'
-export { default as EmptyStateDescription } from './EmptyStateDescription.vue'
-export { default as EmptyStateIcon } from './EmptyStateIcon.vue'
+export { default as EmptyStateIllustration } from './EmptyStateIllustration.vue'
 export { default as EmptyStatePreset } from './EmptyStatePreset.vue'
 export { default as EmptyStateTitle } from './EmptyStateTitle.vue'
 

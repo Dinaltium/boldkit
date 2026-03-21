@@ -2,15 +2,12 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "stat-card",
   "type": "registry:ui",
-  "description": "A statistics display card with trend indicators, progress bars, and color schemes",
+  "description": "Statistics card for dashboards",
   "dependencies": [
-    "class-variance-authority",
     "lucide-vue-next"
   ],
   "registryDependencies": [
-    "utils",
-    "card",
-    "progress"
+    "utils"
   ],
   "files": [
     {

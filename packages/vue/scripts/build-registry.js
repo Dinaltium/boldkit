@@ -145,8 +145,8 @@ const componentMeta = {
   },
   'empty-state': {
     deps: ['lucide-vue-next', 'class-variance-authority'],
-    desc: 'Empty state placeholders with presets for common scenarios',
-    files: ['EmptyState', 'EmptyStateActions', 'EmptyStateDescription', 'EmptyStateIcon', 'EmptyStatePreset', 'EmptyStateTitle']
+    desc: 'Empty state placeholders with 14 presets, horizontal/vertical layouts, animations, and illustration support',
+    files: ['EmptyState', 'EmptyStateActions', 'EmptyStateDescription', 'EmptyStateIcon', 'EmptyStateIllustration', 'EmptyStatePreset', 'EmptyStateTitle']
   },
   kbd: {
     deps: [],

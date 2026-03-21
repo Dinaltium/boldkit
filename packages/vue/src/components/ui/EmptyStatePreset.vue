@@ -1,65 +1,90 @@
 <script setup lang="ts">
-import { computed, h, type Component } from 'vue'
+import { computed, type Component } from 'vue'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import {
   Search,
-  Database,
+  FileQuestion,
   Inbox,
   FolderOpen,
   Users,
   ShoppingCart,
   Bell,
   Image,
+  AlertTriangle,
+  WifiOff,
+  ShieldX,
+  Clock,
+  Wrench,
+  Upload,
 } from 'lucide-vue-next'
 import EmptyState from './EmptyState.vue'
 import EmptyStateIcon from './EmptyStateIcon.vue'
+import EmptyStateIllustration from './EmptyStateIllustration.vue'
 import EmptyStateTitle from './EmptyStateTitle.vue'
 import EmptyStateDescription from './EmptyStateDescription.vue'
 import EmptyStateActions from './EmptyStateActions.vue'
 
 const emptyStateVariants = cva(
-  'flex flex-col items-center justify-center text-center',
+  'flex items-center justify-center',
   {
     variants: {
       variant: {
         default: '',
-        filled: 'bg-muted/50 rounded-none p-8',
+        filled: 'bg-muted/30 border-3 border-dashed border-foreground p-8',
         card: 'bg-card border-3 border-foreground shadow-[4px_4px_0px_hsl(var(--shadow-color))] p-8',
       },
       size: {
-        sm: 'py-6 gap-2',
-        md: 'py-8 gap-3',
-        lg: 'py-12 gap-4',
+        compact: 'gap-2 p-2',
+        sm: 'gap-3 p-4',
+        md: 'gap-4 p-6',
+        lg: 'gap-6 p-8',
+      },
+      layout: {
+        vertical: 'flex-col text-center',
+        horizontal: 'flex-row text-left',
+      },
+      animation: {
+        none: '',
+        fadeIn: 'animate-[fadeIn_0.3s_ease-out]',
+        bounce: 'animate-[bounceIn_0.5s_ease-out]',
+        scale: 'animate-[scaleIn_0.3s_ease-out]',
       },
     },
     defaultVariants: {
       variant: 'default',
       size: 'md',
+      layout: 'vertical',
+      animation: 'none',
     },
   }
 )
 
 const iconContainerVariants = cva(
-  'flex items-center justify-center rounded-none border-3 border-foreground mb-4',
+  'flex items-center justify-center border-3 border-foreground shadow-[3px_3px_0px_hsl(var(--shadow-color))]',
   {
     variants: {
+      size: {
+        xs: 'w-10 h-10',
+        sm: 'w-12 h-12',
+        md: 'w-16 h-16',
+        lg: 'w-20 h-20',
+        xl: 'w-24 h-24',
+      },
       iconColor: {
-        default: 'bg-muted text-muted-foreground',
+        default: 'bg-muted text-foreground',
         primary: 'bg-primary text-primary-foreground',
         secondary: 'bg-secondary text-secondary-foreground',
         accent: 'bg-accent text-accent-foreground',
-        muted: 'bg-muted/50 text-muted-foreground border-muted-foreground/50',
-      },
-      size: {
-        sm: 'p-3',
-        md: 'p-4',
-        lg: 'p-5',
+        muted: 'bg-muted text-muted-foreground',
+        destructive: 'bg-destructive text-destructive-foreground',
+        warning: 'bg-warning text-warning-foreground',
+        success: 'bg-success text-success-foreground',
       },
     },
     defaultVariants: {
-      iconColor: 'default',
       size: 'md',
+      iconColor: 'default',
     },
   }
 )
@@ -67,7 +92,7 @@ const iconContainerVariants = cva(
 type EmptyStateVariants = VariantProps<typeof emptyStateVariants>
 type IconContainerVariants = VariantProps<typeof iconContainerVariants>
 
-type PresetType =
+export type PresetType =
   | 'no-results'
   | 'no-data'
   | 'empty-inbox'
@@ -76,11 +101,18 @@ type PresetType =
   | 'empty-cart'
   | 'no-notifications'
   | 'no-images'
+  | 'error'
+  | 'offline'
+  | 'permission-denied'
+  | 'coming-soon'
+  | 'maintenance'
+  | 'upload'
 
 interface PresetConfig {
   icon: Component
   title: string
   description: string
+  iconColor?: IconContainerVariants['iconColor']
 }
 
 const presets: Record<PresetType, PresetConfig> = {
@@ -90,77 +122,145 @@ const presets: Record<PresetType, PresetConfig> = {
     description: 'Try adjusting your search or filter to find what you\'re looking for.',
   },
   'no-data': {
-    icon: Database,
-    title: 'No data yet',
-    description: 'Get started by adding your first item.',
+    icon: FileQuestion,
+    title: 'No data available',
+    description: 'There\'s nothing to display here yet. Data will appear once available.',
   },
   'empty-inbox': {
     icon: Inbox,
-    title: 'Your inbox is empty',
-    description: 'Messages you receive will appear here.',
+    title: 'Inbox is empty',
+    description: 'You\'re all caught up! New messages will appear here.',
   },
   'empty-folder': {
     icon: FolderOpen,
-    title: 'This folder is empty',
-    description: 'Upload files or create new content to fill this space.',
+    title: 'Folder is empty',
+    description: 'This folder doesn\'t contain any files yet.',
   },
   'no-users': {
     icon: Users,
     title: 'No users found',
-    description: 'Invite team members to collaborate.',
+    description: 'There are no users matching your criteria.',
   },
   'empty-cart': {
     icon: ShoppingCart,
     title: 'Your cart is empty',
-    description: 'Browse our products and add items to your cart.',
+    description: 'Looks like you haven\'t added anything to your cart yet.',
   },
   'no-notifications': {
     icon: Bell,
-    title: 'All caught up!',
-    description: 'You have no new notifications.',
+    title: 'No notifications',
+    description: 'You\'re all caught up! Check back later for updates.',
   },
   'no-images': {
     icon: Image,
-    title: 'No images yet',
-    description: 'Upload images to display them here.',
+    title: 'No images',
+    description: 'There are no images to display. Upload some to get started.',
+  },
+  'error': {
+    icon: AlertTriangle,
+    title: 'Something went wrong',
+    description: 'An error occurred. Please try again or contact support if the problem persists.',
+    iconColor: 'destructive',
+  },
+  'offline': {
+    icon: WifiOff,
+    title: 'You\'re offline',
+    description: 'Please check your internet connection and try again.',
+    iconColor: 'warning',
+  },
+  'permission-denied': {
+    icon: ShieldX,
+    title: 'Access denied',
+    description: 'You don\'t have permission to view this content.',
+    iconColor: 'destructive',
+  },
+  'coming-soon': {
+    icon: Clock,
+    title: 'Coming soon',
+    description: 'This feature is under development. Stay tuned for updates!',
+    iconColor: 'accent',
+  },
+  'maintenance': {
+    icon: Wrench,
+    title: 'Under maintenance',
+    description: 'We\'re performing scheduled maintenance. Please check back soon.',
+    iconColor: 'warning',
+  },
+  'upload': {
+    icon: Upload,
+    title: 'Upload files',
+    description: 'Drag and drop files here, or click to browse.',
+    iconColor: 'primary',
   },
 }
 
-interface EmptyStatePresetProps {
+export interface EmptyStatePresetProps {
   preset: PresetType
   variant?: EmptyStateVariants['variant']
   size?: EmptyStateVariants['size']
+  layout?: EmptyStateVariants['layout']
+  animation?: EmptyStateVariants['animation']
   iconColor?: IconContainerVariants['iconColor']
+  iconSize?: IconContainerVariants['size']
+  customTitle?: string
+  customDescription?: string
   class?: string
 }
 
 const props = withDefaults(defineProps<EmptyStatePresetProps>(), {
   variant: 'default',
   size: 'md',
-  iconColor: 'default',
+  layout: 'vertical',
+  animation: 'none',
 })
 
 const config = computed(() => presets[props.preset])
+const finalIconColor = computed(() => props.iconColor ?? config.value.iconColor ?? 'default')
+
+const computedIconSize = computed(() => {
+  if (props.iconSize) return props.iconSize
+  switch (props.size) {
+    case 'compact': return 'sm'
+    case 'sm': return 'sm'
+    case 'lg': return 'lg'
+    default: return 'md'
+  }
+})
 
 const iconSizeClass = computed(() => {
-  const sizes = {
-    sm: 'h-8 w-8',
-    md: 'h-10 w-10',
-    lg: 'h-12 w-12',
+  const sizes: Record<string, string> = {
+    xs: 'h-5 w-5',
+    sm: 'h-6 w-6',
+    md: 'h-8 w-8',
+    lg: 'h-10 w-10',
+    xl: 'h-12 w-12',
   }
-  return sizes[props.size || 'md']
+  return sizes[computedIconSize.value] || sizes.md
 })
 </script>
 
 <template>
-  <EmptyState :variant="variant" :size="size" :class="props.class">
-    <EmptyStateIcon :icon-color="iconColor" :size="size">
-      <component :is="config.icon" :class="iconSizeClass" />
+  <EmptyState
+    :variant="variant"
+    :size="size"
+    :layout="layout"
+    :animation="animation"
+    :class="props.class"
+  >
+    <EmptyStateIllustration v-if="$slots.illustration">
+      <slot name="illustration" />
+    </EmptyStateIllustration>
+    <EmptyStateIcon v-else :icon-color="finalIconColor" :size="computedIconSize">
+      <slot name="icon">
+        <component :is="config.icon" :class="iconSizeClass" />
+      </slot>
     </EmptyStateIcon>
-    <EmptyStateTitle>{{ config.title }}</EmptyStateTitle>
-    <EmptyStateDescription>{{ config.description }}</EmptyStateDescription>
-    <EmptyStateActions v-if="$slots.action">
-      <slot name="action" />
-    </EmptyStateActions>
+    <div :class="cn(layout === 'horizontal' && 'flex flex-col')">
+      <EmptyStateTitle>{{ customTitle ?? config.title }}</EmptyStateTitle>
+      <EmptyStateDescription>{{ customDescription ?? config.description }}</EmptyStateDescription>
+      <EmptyStateActions v-if="$slots.action">
+        <slot name="action" />
+      </EmptyStateActions>
+    </div>
   </EmptyState>
 </template>

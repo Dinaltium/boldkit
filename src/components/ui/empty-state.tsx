@@ -1,14 +1,29 @@
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
-import { FileQuestion, Search, Inbox, FolderOpen, Users, ShoppingCart, Bell, Image } from 'lucide-react'
+import {
+  FileQuestion,
+  Search,
+  Inbox,
+  FolderOpen,
+  Users,
+  ShoppingCart,
+  Bell,
+  Image,
+  AlertTriangle,
+  WifiOff,
+  ShieldX,
+  Clock,
+  Wrench,
+  Upload,
+} from 'lucide-react'
 
 // ============================================================================
 // Empty State Root
 // ============================================================================
 
 const emptyStateVariants = cva(
-  'flex flex-col items-center justify-center text-center',
+  'flex items-center justify-center',
   {
     variants: {
       variant: {
@@ -17,14 +32,27 @@ const emptyStateVariants = cva(
         card: 'bg-card border-3 border-foreground shadow-[4px_4px_0px_hsl(var(--shadow-color))] p-8',
       },
       size: {
+        compact: 'gap-2 p-2',
         sm: 'gap-3 p-4',
         md: 'gap-4 p-6',
         lg: 'gap-6 p-8',
+      },
+      layout: {
+        vertical: 'flex-col text-center',
+        horizontal: 'flex-row text-left',
+      },
+      animation: {
+        none: '',
+        fadeIn: 'animate-[fadeIn_0.3s_ease-out]',
+        bounce: 'animate-[bounceIn_0.5s_ease-out]',
+        scale: 'animate-[scaleIn_0.3s_ease-out]',
       },
     },
     defaultVariants: {
       variant: 'default',
       size: 'md',
+      layout: 'vertical',
+      animation: 'none',
     },
   }
 )
@@ -34,11 +62,11 @@ export interface EmptyStateProps
     VariantProps<typeof emptyStateVariants> {}
 
 const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
-  ({ className, variant, size, children, ...props }, ref) => {
+  ({ className, variant, size, layout, animation, children, ...props }, ref) => {
     return (
       <div
         ref={ref}
-        className={cn(emptyStateVariants({ variant, size }), className)}
+        className={cn(emptyStateVariants({ variant, size, layout, animation }), className)}
         {...props}
       >
         {children}
@@ -57,9 +85,11 @@ const iconContainerVariants = cva(
   {
     variants: {
       size: {
+        xs: 'w-10 h-10',
         sm: 'w-12 h-12',
         md: 'w-16 h-16',
         lg: 'w-20 h-20',
+        xl: 'w-24 h-24',
       },
       iconColor: {
         default: 'bg-muted text-foreground',
@@ -67,6 +97,9 @@ const iconContainerVariants = cva(
         secondary: 'bg-secondary text-secondary-foreground',
         accent: 'bg-accent text-accent-foreground',
         muted: 'bg-muted text-muted-foreground',
+        destructive: 'bg-destructive text-destructive-foreground',
+        warning: 'bg-warning text-warning-foreground',
+        success: 'bg-success text-success-foreground',
       },
     },
     defaultVariants: {
@@ -76,16 +109,59 @@ const iconContainerVariants = cva(
   }
 )
 
+const iconSizeMap = {
+  xs: 'h-5 w-5',
+  sm: 'h-6 w-6',
+  md: 'h-8 w-8',
+  lg: 'h-10 w-10',
+  xl: 'h-12 w-12',
+}
+
 export interface EmptyStateIconProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof iconContainerVariants> {}
+    VariantProps<typeof iconContainerVariants> {
+  /** Custom icon size independent of container */
+  iconSize?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+}
 
 const EmptyStateIcon = React.forwardRef<HTMLDivElement, EmptyStateIconProps>(
-  ({ className, size, iconColor, children, ...props }, ref) => {
+  ({ className, size, iconColor, iconSize, children, ...props }, ref) => {
     return (
       <div
         ref={ref}
         className={cn(iconContainerVariants({ size, iconColor }), className)}
+        {...props}
+      >
+        {React.isValidElement(children)
+          ? React.cloneElement(children as React.ReactElement<{ className?: string }>, {
+              className: cn(
+                iconSizeMap[iconSize ?? size ?? 'md'],
+                (children as React.ReactElement<{ className?: string }>).props.className
+              ),
+            })
+          : children}
+      </div>
+    )
+  }
+)
+EmptyStateIcon.displayName = 'EmptyStateIcon'
+
+// ============================================================================
+// Empty State Illustration (for custom SVGs/images)
+// ============================================================================
+
+export interface EmptyStateIllustrationProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Max width for the illustration */
+  maxWidth?: string | number
+}
+
+const EmptyStateIllustration = React.forwardRef<HTMLDivElement, EmptyStateIllustrationProps>(
+  ({ className, maxWidth = '200px', children, style, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn('flex items-center justify-center', className)}
+        style={{ maxWidth, ...style }}
         {...props}
       >
         {children}
@@ -93,7 +169,7 @@ const EmptyStateIcon = React.forwardRef<HTMLDivElement, EmptyStateIconProps>(
     )
   }
 )
-EmptyStateIcon.displayName = 'EmptyStateIcon'
+EmptyStateIllustration.displayName = 'EmptyStateIllustration'
 
 // ============================================================================
 // Empty State Title
@@ -171,71 +247,161 @@ export type EmptyStatePresetType =
   | 'empty-cart'
   | 'no-notifications'
   | 'no-images'
+  // New presets
+  | 'error'
+  | 'offline'
+  | 'permission-denied'
+  | 'coming-soon'
+  | 'maintenance'
+  | 'upload'
 
-const presetConfig: Record<EmptyStatePresetType, { icon: React.ReactNode; title: string; description: string }> = {
+interface PresetConfig {
+  icon: React.ReactNode
+  title: string
+  description: string
+  iconColor?: VariantProps<typeof iconContainerVariants>['iconColor']
+}
+
+const presetConfig: Record<EmptyStatePresetType, PresetConfig> = {
   'no-results': {
-    icon: <Search className="h-8 w-8" />,
+    icon: <Search />,
     title: 'No results found',
     description: 'Try adjusting your search or filter to find what you\'re looking for.',
   },
   'no-data': {
-    icon: <FileQuestion className="h-8 w-8" />,
+    icon: <FileQuestion />,
     title: 'No data available',
     description: 'There\'s nothing to display here yet. Data will appear once available.',
   },
   'empty-inbox': {
-    icon: <Inbox className="h-8 w-8" />,
+    icon: <Inbox />,
     title: 'Inbox is empty',
     description: 'You\'re all caught up! New messages will appear here.',
   },
   'empty-folder': {
-    icon: <FolderOpen className="h-8 w-8" />,
+    icon: <FolderOpen />,
     title: 'Folder is empty',
     description: 'This folder doesn\'t contain any files yet.',
   },
   'no-users': {
-    icon: <Users className="h-8 w-8" />,
+    icon: <Users />,
     title: 'No users found',
     description: 'There are no users matching your criteria.',
   },
   'empty-cart': {
-    icon: <ShoppingCart className="h-8 w-8" />,
+    icon: <ShoppingCart />,
     title: 'Your cart is empty',
     description: 'Looks like you haven\'t added anything to your cart yet.',
   },
   'no-notifications': {
-    icon: <Bell className="h-8 w-8" />,
+    icon: <Bell />,
     title: 'No notifications',
     description: 'You\'re all caught up! Check back later for updates.',
   },
   'no-images': {
-    icon: <Image className="h-8 w-8" />,
+    icon: <Image />,
     title: 'No images',
     description: 'There are no images to display. Upload some to get started.',
+  },
+  // New presets
+  'error': {
+    icon: <AlertTriangle />,
+    title: 'Something went wrong',
+    description: 'An error occurred. Please try again or contact support if the problem persists.',
+    iconColor: 'destructive',
+  },
+  'offline': {
+    icon: <WifiOff />,
+    title: 'You\'re offline',
+    description: 'Please check your internet connection and try again.',
+    iconColor: 'warning',
+  },
+  'permission-denied': {
+    icon: <ShieldX />,
+    title: 'Access denied',
+    description: 'You don\'t have permission to view this content.',
+    iconColor: 'destructive',
+  },
+  'coming-soon': {
+    icon: <Clock />,
+    title: 'Coming soon',
+    description: 'This feature is under development. Stay tuned for updates!',
+    iconColor: 'accent',
+  },
+  'maintenance': {
+    icon: <Wrench />,
+    title: 'Under maintenance',
+    description: 'We\'re performing scheduled maintenance. Please check back soon.',
+    iconColor: 'warning',
+  },
+  'upload': {
+    icon: <Upload />,
+    title: 'Upload files',
+    description: 'Drag and drop files here, or click to browse.',
+    iconColor: 'primary',
   },
 }
 
 export interface EmptyStatePresetProps
   extends Omit<EmptyStateProps, 'children'>,
-    VariantProps<typeof iconContainerVariants> {
+    Omit<VariantProps<typeof iconContainerVariants>, 'size'> {
   preset: EmptyStatePresetType
   action?: React.ReactNode
   customTitle?: string
   customDescription?: string
+  /** Custom icon to override the preset icon */
+  customIcon?: React.ReactNode
+  /** Custom illustration (overrides icon completely) */
+  illustration?: React.ReactNode
+  /** Icon container size */
+  iconSize?: VariantProps<typeof iconContainerVariants>['size']
 }
 
 const EmptyStatePreset = React.forwardRef<HTMLDivElement, EmptyStatePresetProps>(
-  ({ preset, action, customTitle, customDescription, iconColor, size, variant, className, ...props }, ref) => {
+  (
+    {
+      preset,
+      action,
+      customTitle,
+      customDescription,
+      customIcon,
+      illustration,
+      iconColor,
+      iconSize,
+      size,
+      layout,
+      variant,
+      animation,
+      className,
+      ...props
+    },
+    ref
+  ) => {
     const config = presetConfig[preset]
+    const finalIconColor = iconColor ?? config.iconColor ?? 'default'
 
     return (
-      <EmptyState ref={ref} variant={variant} size={size} className={className} {...props}>
-        <EmptyStateIcon iconColor={iconColor} size={size}>
-          {config.icon}
-        </EmptyStateIcon>
-        <EmptyStateTitle>{customTitle ?? config.title}</EmptyStateTitle>
-        <EmptyStateDescription>{customDescription ?? config.description}</EmptyStateDescription>
-        {action && <EmptyStateActions>{action}</EmptyStateActions>}
+      <EmptyState
+        ref={ref}
+        variant={variant}
+        size={size}
+        layout={layout}
+        animation={animation}
+        className={className}
+        {...props}
+      >
+        {illustration ? (
+          <EmptyStateIllustration>{illustration}</EmptyStateIllustration>
+        ) : (
+          <EmptyStateIcon iconColor={finalIconColor} size={iconSize ?? (size === 'compact' ? 'sm' : size === 'sm' ? 'sm' : size === 'lg' ? 'lg' : 'md')}>
+            {customIcon ?? config.icon}
+          </EmptyStateIcon>
+        )}
+        <div className={cn(layout === 'horizontal' && 'flex flex-col')}>
+          <EmptyStateTitle>{customTitle ?? config.title}</EmptyStateTitle>
+          <EmptyStateDescription>{customDescription ?? config.description}</EmptyStateDescription>
+          {action && <EmptyStateActions>{action}</EmptyStateActions>}
+        </div>
       </EmptyState>
     )
   }
@@ -249,6 +415,7 @@ EmptyStatePreset.displayName = 'EmptyStatePreset'
 export {
   EmptyState,
   EmptyStateIcon,
+  EmptyStateIllustration,
   EmptyStateTitle,
   EmptyStateDescription,
   EmptyStateActions,
