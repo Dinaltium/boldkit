@@ -20,7 +20,6 @@ const resourceLinks = [
   { label: 'GitHub Repository', href: 'https://github.com/ANIBIT14/boldkit', external: true },
   { label: 'Changelog', href: 'https://github.com/ANIBIT14/boldkit/releases', external: true },
   { label: 'Report an Issue', href: 'https://github.com/ANIBIT14/boldkit/issues', external: true },
-  { label: 'Discussions', href: 'https://github.com/ANIBIT14/boldkit/discussions', external: true },
 ]
 
 export function Footer() {
