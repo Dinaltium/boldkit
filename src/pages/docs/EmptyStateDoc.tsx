@@ -12,7 +12,8 @@ import {
 import { CodeBlock } from '@/components/docs/ComponentDoc'
 import { SEO, getComponentSEO } from '@/components/SEO'
 import { useFramework, ReactIcon, VueIcon } from '@/hooks/use-framework'
-import { Plus, Upload, Search, Inbox, Star } from 'lucide-react'
+import { Plus, Upload, Search, Inbox, Star, RotateCcw } from 'lucide-react'
+import { useState } from 'react'
 
 // ─── Install ───────────────────────────────────────────────────────────────
 const reactInstallCode = `npx shadcn@latest add "https://boldkit.dev/r/empty-state.json"`
@@ -283,6 +284,7 @@ const vueActionsCode = `<EmptyStatePreset preset="no-data">
 // ─── Component ─────────────────────────────────────────────────────────────
 export function EmptyStateDoc() {
   const { framework } = useFramework()
+  const [animKey, setAnimKey] = useState(0)
 
   return (
     <>
@@ -380,7 +382,13 @@ export function EmptyStateDoc() {
             Works on both custom composition and presets.
           </p>
 
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="flex items-center justify-end">
+            <Button variant="outline" size="sm" className="gap-2" onClick={() => setAnimKey(k => k + 1)}>
+              <RotateCcw className="h-3.5 w-3.5" /> Replay
+            </Button>
+          </div>
+
+          <div key={animKey} className="grid md:grid-cols-3 gap-4">
             <Card className="p-4">
               <EmptyState size="sm" animation="fadeIn">
                 <EmptyStateIcon iconColor="primary">
