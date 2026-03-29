@@ -617,7 +617,7 @@ export function Home() {
                       { step: '1', label: 'Install via CLI', done: true },
                       { step: '2', label: 'Import component', done: true },
                       { step: '3', label: 'Ship it', done: true },
-                    ].map(({ step, label, done }) => (
+                    ].map(({ step, label }) => (
                       <div key={step} className="flex items-center gap-2 border-2 border-foreground bg-muted px-2.5 py-1.5">
                         <div className="h-4 w-4 border-2 border-foreground bg-primary flex items-center justify-center shrink-0">
                           <Check className="h-2.5 w-2.5" />
