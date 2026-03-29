@@ -648,6 +648,7 @@ export function ThemeBuilder({ embedded = false }: ThemeBuilderProps) {
             </Card>
           </div>
         </div>
+      </div>
     </div>
   )
 
