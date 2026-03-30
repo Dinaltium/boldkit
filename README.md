@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![BoldKit Banner](assets/banner.png)
+![BoldKit Banner](https://ik.imagekit.io/fincalfy/Screenshot%202026-03-21%20at%209.48.00%E2%80%AFPM.png?updatedAt=1774110147980)
 
 **Bold. Raw. Beautiful.**
 
