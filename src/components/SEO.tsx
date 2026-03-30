@@ -216,9 +216,9 @@ export const pageSEO = {
     ],
   },
   charts: {
-    title: 'Charts - 10 Neubrutalism Chart Types',
-    description: 'Neubrutalism styled charts and data visualization for React and Vue 3. 10 chart types including bar, line, area, pie, donut, radar, radial bar, gauge, and sparkline charts.',
-    keywords: 'React charts, Vue 3 charts, neubrutalism charts, data visualization, chart components, Recharts, vue-echarts, gauge chart, radar chart, donut chart, sparkline, radial bar chart',
+    title: 'Charts - 14 Neubrutalism Chart Types',
+    description: 'Neubrutalism styled charts and data visualization for React and Vue 3. 14 chart types including bar, line, area, pie, donut, radar, radial bar, gauge, sparkline, funnel, treemap, heatmap, and sankey charts.',
+    keywords: 'React charts, Vue 3 charts, neubrutalism charts, data visualization, chart components, Recharts, vue-echarts, gauge chart, radar chart, donut chart, sparkline, radial bar chart, funnel chart, treemap chart, heatmap chart, sankey chart',
     canonical: 'https://boldkit.dev/charts',
     breadcrumbs: [
       { name: 'Home', url: 'https://boldkit.dev/' },
