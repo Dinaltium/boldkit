@@ -299,10 +299,7 @@ export { default as FunnelChart } from './FunnelChart.vue'
 export { default as TreemapChart } from './TreemapChart.vue'
 export { default as HeatmapChart } from './HeatmapChart.vue'
 export { default as SankeyChart } from './SankeyChart.vue'
-export type { FunnelChartData } from './FunnelChart.vue'
-export type { TreemapChartData } from './TreemapChart.vue'
-export type { HeatmapCellData } from './HeatmapChart.vue'
-export type { SankeyNode, SankeyLink } from './SankeyChart.vue'
+export type { FunnelChartData, TreemapChartData, HeatmapCellData, SankeyNode, SankeyLink } from './chart-types'
 export { chartContainerVariants } from './chart-variants'
 export {
   CHART_PALETTES,

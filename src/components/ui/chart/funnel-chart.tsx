@@ -15,7 +15,6 @@ export interface FunnelChartProps extends React.HTMLAttributes<HTMLDivElement> {
   showLabels?: boolean
   showTooltip?: boolean
   animated?: boolean
-  variant?: 'default' | 'pyramid'
 }
 
 const NEUBRUTALISM_COLORS = [

@@ -2853,7 +2853,11 @@ const option = ref({
     ]
   }]
 })
-</script>`}</code>
+</script>
+
+<template>
+  <VChart :option="option" autoresize style="height: 320px" />
+</template>`}</code>
                 </pre>
               </CardContent>
             </Card>
@@ -2918,7 +2922,11 @@ const option = ref({
     data: [[0, 0, 42], [0, 1, 87], /* ... */],
   }]
 })
-</script>`}</code>
+</script>
+
+<template>
+  <VChart :option="option" autoresize style="height: 300px" />
+</template>`}</code>
                 </pre>
               </CardContent>
             </Card>
@@ -3005,7 +3013,11 @@ const option = ref({
     ]
   }]
 })
-</script>`}</code>
+</script>
+
+<template>
+  <VChart :option="option" autoresize style="height: 300px" />
+</template>`}</code>
                 </pre>
               </CardContent>
             </Card>
