@@ -59,6 +59,9 @@ const components = [
   { name: 'Kbd', href: '/components/kbd' },
   { name: 'Label', href: '/components/label' },
   { name: 'Layered Card', href: '/components/layered-card' },
+  { name: 'MC Background', href: '/components/math-curve-background', isNew: true },
+  { name: 'MC Loader', href: '/components/math-curve-loader', isNew: true },
+  { name: 'MC Progress', href: '/components/math-curve-progress', isNew: true },
   { name: 'Marquee', href: '/components/marquee' },
   { name: 'Pagination', href: '/components/pagination' },
   { name: 'Popover', href: '/components/popover' },
@@ -168,9 +171,9 @@ function Sidebar({ className, onLinkClick }: { className?: string; onLinkClick?:
                   className="w-full justify-between h-9"
                   size="sm"
                 >
-                  <span>{component.name}</span>
+                  <span className="truncate">{component.name}</span>
                   {component.isNew && (
-                    <Badge className="ml-auto h-4 px-1.5 text-[9px]">New</Badge>
+                    <Badge className="ml-1 shrink-0 h-4 px-1.5 text-[9px]">New</Badge>
                   )}
                 </Button>
               </Link>

@@ -10,6 +10,7 @@ import { LayeredCard, LayeredCardContent, LayeredCardHeader, LayeredCardTitle } 
 import { Sticker, Stamp } from '@/components/ui/sticker'
 import { StatCard } from '@/components/ui/stat-card'
 import { Spinner } from '@/components/ui/spinner'
+import { MathCurveLoader } from '@/components/ui/math-curve-loader'
 import { Layout } from '@/components/layout'
 import {
   Copy, Check, ArrowRight, Zap, Palette, Code2, Smartphone,
@@ -932,6 +933,108 @@ export function Home() {
               <Link to="/blocks">
                 <Button size="lg" className="w-full gap-2">Explore All Blocks <ArrowRight className="h-4 w-4" /></Button>
               </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ── MATH CURVES SECTION ───────────────────────────────────── */}
+        <section className="relative overflow-hidden border-b-3 border-foreground bg-foreground py-14 md:py-20">
+          {/* Grid pattern overlay */}
+          <div className="absolute inset-0 opacity-5" style={{
+            backgroundImage: 'linear-gradient(hsl(var(--primary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)) 1px, transparent 1px)',
+            backgroundSize: '32px 32px'
+          }} />
+
+          <div className="container relative mx-auto px-4">
+            {/* Header */}
+            <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <div className="mb-3 inline-flex items-center gap-2 border-2 border-primary px-3 py-1">
+                  <span className="h-2 w-2 bg-primary animate-pulse" />
+                  <span className="text-[11px] font-black uppercase tracking-[0.2em] text-primary" style={MONO}>New Component</span>
+                </div>
+                <h2
+                  className="leading-none text-background"
+                  style={{ ...DISPLAY, fontSize: 'clamp(32px, 5.5vw, 76px)' }}
+                >
+                  <span className="block">MATH CURVE</span>
+                  <span className="block text-primary">LOADERS</span>
+                </h2>
+                <p className="mt-3 max-w-md text-sm text-background/60" style={MONO}>
+                  Parametric curve animations — rose, lissajous, butterfly, hypotrochoid & more. A loader, progress indicator, and background component.
+                </p>
+              </div>
+              <div className="hidden sm:flex flex-col gap-2">
+                {[
+                  { label: 'Loader', sub: '8 curves', to: '/components/math-curve-loader', color: 'bg-primary' },
+                  { label: 'Progress', sub: '5 curves', to: '/components/math-curve-progress', color: 'bg-secondary' },
+                  { label: 'Background', sub: '4 curves', to: '/components/math-curve-background', color: 'bg-accent' },
+                ].map(({ label, sub, to, color }) => (
+                  <Link key={to} to={to}>
+                    <div className="group flex items-center gap-3 border-2 border-background/20 px-4 py-2.5 hover:border-background/60 hover:bg-background/8 transition-all duration-150">
+                      <div className={`h-2 w-2 shrink-0 ${color}`} />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-black uppercase tracking-wider text-background leading-none">{label}</div>
+                        <div className="text-[10px] text-background/40 mt-0.5" style={MONO}>{sub}</div>
+                      </div>
+                      <ArrowRight className="h-3.5 w-3.5 text-background/30 group-hover:text-background/80 transition-colors" />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Curve grid — 8 animated loaders */}
+            <div className="grid grid-cols-4 gap-0 sm:grid-cols-8 border-3 border-background/20 max-w-3xl">
+              {(['rose', 'lissajous', 'butterfly', 'hypotrochoid', 'cardioid', 'lemniscate', 'fourier', 'rose3'] as const).map((curve, i) => (
+                <div
+                  key={curve}
+                  className="flex flex-col items-center justify-center gap-3 border border-background/10 py-6 px-2 hover:bg-background/5 transition-colors"
+                >
+                  <MathCurveLoader
+                    curve={curve}
+                    size="lg"
+                    speed="normal"
+                    className="text-background"
+                    headColor={i % 3 === 0 ? 'hsl(var(--primary))' : i % 3 === 1 ? 'hsl(var(--secondary))' : 'hsl(var(--accent))'}
+                  />
+                  <span
+                    className="text-[9px] font-black uppercase tracking-widest text-background/40"
+                    style={MONO}
+                  >
+                    {curve}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Mobile component links */}
+            <div className="mt-6 flex gap-3 sm:hidden">
+              {[
+                { label: 'Loader', to: '/components/math-curve-loader', color: 'bg-primary' },
+                { label: 'Progress', to: '/components/math-curve-progress', color: 'bg-secondary' },
+                { label: 'Background', to: '/components/math-curve-background', color: 'bg-accent' },
+              ].map(({ label, to, color }) => (
+                <Link key={to} to={to} className="flex-1">
+                  <div className="flex items-center justify-center gap-2 border-2 border-background/20 py-2 text-xs font-black uppercase text-background hover:border-background/50 transition-colors">
+                    <div className={`h-1.5 w-1.5 ${color}`} />
+                    {label}
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* Bottom pill badges */}
+            <div className="mt-8 flex flex-wrap gap-2">
+              {['Rose', 'Lissajous', 'Butterfly', 'Hypotrochoid', 'Cardioid', 'Lemniscate', 'Fourier', 'Spiral', 'Heart'].map(name => (
+                <span
+                  key={name}
+                  className="border border-background/20 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-background/50"
+                  style={MONO}
+                >
+                  {name}
+                </span>
+              ))}
             </div>
           </div>
         </section>

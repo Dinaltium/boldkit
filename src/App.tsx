@@ -64,6 +64,11 @@ const ToggleDoc = lazy(() => import('@/pages/docs/ToggleDoc').then(m => ({ defau
 const ToggleGroupDoc = lazy(() => import('@/pages/docs/ToggleGroupDoc').then(m => ({ default: m.ToggleGroupDoc })))
 const TooltipDoc = lazy(() => import('@/pages/docs/TooltipDoc').then(m => ({ default: m.TooltipDoc })))
 
+// Math Curve component documentation pages
+const MathCurveLoaderDoc = lazy(() => import('@/pages/docs/MathCurveLoaderDoc').then(m => ({ default: m.MathCurveLoaderDoc })))
+const MathCurveProgressDoc = lazy(() => import('@/pages/docs/MathCurveProgressDoc').then(m => ({ default: m.MathCurveProgressDoc })))
+const MathCurveBackgroundDoc = lazy(() => import('@/pages/docs/MathCurveBackgroundDoc').then(m => ({ default: m.MathCurveBackgroundDoc })))
+
 // New v2.5.0 component documentation pages
 const SpinnerDoc = lazy(() => import('@/pages/docs/SpinnerDoc').then(m => ({ default: m.SpinnerDoc })))
 const KbdDoc = lazy(() => import('@/pages/docs/KbdDoc').then(m => ({ default: m.KbdDoc })))
@@ -200,6 +205,10 @@ function App() {
               <Route path="toggle" element={<Suspense fallback={<PageLoader />}><ToggleDoc /></Suspense>} />
               <Route path="toggle-group" element={<Suspense fallback={<PageLoader />}><ToggleGroupDoc /></Suspense>} />
               <Route path="tooltip" element={<Suspense fallback={<PageLoader />}><TooltipDoc /></Suspense>} />
+              {/* Math Curve Components */}
+              <Route path="math-curve-loader" element={<Suspense fallback={<PageLoader />}><MathCurveLoaderDoc /></Suspense>} />
+              <Route path="math-curve-progress" element={<Suspense fallback={<PageLoader />}><MathCurveProgressDoc /></Suspense>} />
+              <Route path="math-curve-background" element={<Suspense fallback={<PageLoader />}><MathCurveBackgroundDoc /></Suspense>} />
               {/* v2.5.0 Components */}
               <Route path="spinner" element={<Suspense fallback={<PageLoader />}><SpinnerDoc /></Suspense>} />
               <Route path="kbd" element={<Suspense fallback={<PageLoader />}><KbdDoc /></Suspense>} />

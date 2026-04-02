@@ -43,3 +43,8 @@ export { TextareaDoc } from './TextareaDoc'
 export { ToggleDoc } from './ToggleDoc'
 export { ToggleGroupDoc } from './ToggleGroupDoc'
 export { TooltipDoc } from './TooltipDoc'
+
+// Math Curve Components
+export { MathCurveLoaderDoc } from './MathCurveLoaderDoc'
+export { MathCurveProgressDoc } from './MathCurveProgressDoc'
+export { MathCurveBackgroundDoc } from './MathCurveBackgroundDoc'

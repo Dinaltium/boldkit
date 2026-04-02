@@ -197,8 +197,8 @@ export const pageSEO = {
   },
   components: {
     title: 'Components',
-    description: 'Browse 50+ neubrutalism components for React and Vue 3. Buttons, cards, inputs, dialogs, spinners, steppers, dropzones and more with thick borders and hard shadows.',
-    keywords: 'React components, Vue 3 components, UI components, neubrutalism buttons, neubrutalism cards, form components, spinner, stepper, dropzone, stat card, kbd',
+    description: 'Browse 50+ neubrutalism components for React and Vue 3. Buttons, cards, inputs, dialogs, spinners, math curve loaders, steppers, dropzones and more with thick borders and hard shadows.',
+    keywords: 'React components, Vue 3 components, UI components, neubrutalism buttons, neubrutalism cards, form components, spinner, stepper, dropzone, stat card, kbd, math curve loader, math curve progress, math curve background, parametric curve animation',
     canonical: 'https://boldkit.dev/components',
     breadcrumbs: [
       { name: 'Home', url: 'https://boldkit.dev/' },

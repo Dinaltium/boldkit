@@ -249,6 +249,11 @@ export { default as KbdCombo } from './KbdCombo.vue'
 // Spinner
 export { default as Spinner } from './Spinner.vue'
 
+// Math Curve Components
+export { default as MathCurveLoader } from './MathCurveLoader.vue'
+export { default as MathCurveProgress } from './MathCurveProgress.vue'
+export { default as MathCurveBackground } from './MathCurveBackground.vue'
+
 // Stat Card
 export { default as StatCard } from './StatCard.vue'
 
