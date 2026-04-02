@@ -60,7 +60,7 @@ const props = withDefaults(defineProps<GaugeChartProps>(), {
 })
 
 const normalizedValue = computed(() => Math.max(props.min, Math.min(props.max, props.value)))
-const percentage = computed(() => ((normalizedValue.value - props.min) / (props.max - props.min)) * 100)
+const percentage = computed(() => props.max === props.min ? 50 : ((normalizedValue.value - props.min) / (props.max - props.min)) * 100)
 
 // Whether this variant uses a 360° full circle or a 180° semicircle sweep
 const isFull = computed(() => props.variant === 'full')

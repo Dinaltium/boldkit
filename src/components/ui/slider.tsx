@@ -46,6 +46,7 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
     const animationRef = React.useRef<number | null>(null)
     const lastTimeRef = React.useRef<number>(0)
     const isDraggingRef = React.useRef<boolean>(false)
+    const keyboardDragTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
     const currentValueRef = React.useRef<number[]>(defaultValue)
 
     // Track active drag handlers for cleanup on unmount
@@ -166,6 +167,9 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       return () => {
         if (animationRef.current) {
           cancelAnimationFrame(animationRef.current)
+        }
+        if (keyboardDragTimeoutRef.current) {
+          clearTimeout(keyboardDragTimeoutRef.current)
         }
       }
     }, [])
@@ -390,7 +394,8 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       })
       isDraggingRef.current = true
       startSpringLoop()
-      setTimeout(() => { isDraggingRef.current = false }, 300)
+      if (keyboardDragTimeoutRef.current) clearTimeout(keyboardDragTimeoutRef.current)
+      keyboardDragTimeoutRef.current = setTimeout(() => { isDraggingRef.current = false }, 300)
     }
 
     // Calculate range fill position

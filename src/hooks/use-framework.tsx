@@ -28,14 +28,6 @@ export function FrameworkProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(STORAGE_KEY, newFramework)
   }
 
-  // Sync with localStorage on mount
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored === 'vue' || stored === 'react') {
-      setFrameworkState(stored)
-    }
-  }, [])
-
   return (
     <FrameworkContext.Provider value={{ framework, setFramework }}>
       {children}

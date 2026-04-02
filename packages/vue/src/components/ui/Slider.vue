@@ -65,6 +65,8 @@ const squishes = ref<{ scaleX: number; scaleY: number }[]>(
 
 let animationId: number | null = null
 let lastTime = 0
+let activeMoveHandler: ((e: PointerEvent) => void) | null = null
+let activeUpHandler: (() => void) | null = null
 
 // Update targets when value changes
 watch(actualValue, (newValue) => {
@@ -141,6 +143,8 @@ onMounted(() => {
 
 onUnmounted(() => {
   if (animationId) cancelAnimationFrame(animationId)
+  if (activeMoveHandler) document.removeEventListener('pointermove', activeMoveHandler)
+  if (activeUpHandler) document.removeEventListener('pointerup', activeUpHandler)
 })
 
 function getValueFromPosition(clientX: number, clientY: number): number {
@@ -231,11 +235,15 @@ function handleTrackPointerDown(e: PointerEvent) {
 
   const handlePointerUp = () => {
     activeThumb.value = null
+    activeMoveHandler = null
+    activeUpHandler = null
     emit('valueCommit', actualValue.value)
     document.removeEventListener('pointermove', handlePointerMove)
     document.removeEventListener('pointerup', handlePointerUp)
   }
 
+  activeMoveHandler = handlePointerMove
+  activeUpHandler = handlePointerUp
   document.addEventListener('pointermove', handlePointerMove)
   document.addEventListener('pointerup', handlePointerUp)
 }
@@ -256,11 +264,15 @@ function handleThumbPointerDown(index: number, e: PointerEvent) {
 
   const handlePointerUp = () => {
     activeThumb.value = null
+    activeMoveHandler = null
+    activeUpHandler = null
     emit('valueCommit', actualValue.value)
     document.removeEventListener('pointermove', handlePointerMove)
     document.removeEventListener('pointerup', handlePointerUp)
   }
 
+  activeMoveHandler = handlePointerMove
+  activeUpHandler = handlePointerUp
   document.addEventListener('pointermove', handlePointerMove)
   document.addEventListener('pointerup', handlePointerUp)
 }

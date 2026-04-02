@@ -59,8 +59,8 @@ const option = computed(() => {
     yAxis: {
       type: 'value',
       show: false,
-      min: Math.min(...props.data) * 0.9,
-      max: Math.max(...props.data) * 1.1,
+      min: props.data.length > 0 ? Math.min(...props.data) * 0.9 : 0,
+      max: props.data.length > 0 ? Math.max(...props.data) * 1.1 : 1,
     },
   }
 

@@ -79,6 +79,7 @@ const Dropzone = React.forwardRef<HTMLDivElement, DropzoneProps>(
     const reset = React.useCallback(() => {
       setAcceptedFiles([])
       setRejectedFiles([])
+      if (inputRef.current) inputRef.current.value = ''
     }, [])
 
     const state: DropzoneState = {
