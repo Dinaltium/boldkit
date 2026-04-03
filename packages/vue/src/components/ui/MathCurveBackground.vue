@@ -29,6 +29,8 @@ const speedMap: Record<NonNullable<MathCurveBackgroundProps['speed']>, number> =
   fast: 3000,
 }
 
+const HEAD_SIZE = 8
+
 const svgPathRef = shallowRef<SVGPathElement | null>(null)
 const svgHeadRef = shallowRef<SVGRectElement | null>(null)
 
@@ -54,8 +56,8 @@ function startLoop() {
     if (svgHeadRef.value) {
       const { x, y } = getPoint(props.curve ?? 'rose', progress, detailScale)
       const angle = getAngle(props.curve ?? 'rose', progress, detailScale)
-      svgHeadRef.value.setAttribute('x', String(x - 4))
-      svgHeadRef.value.setAttribute('y', String(y - 4))
+      svgHeadRef.value.setAttribute('x', String(x - HEAD_SIZE / 2))
+      svgHeadRef.value.setAttribute('y', String(y - HEAD_SIZE / 2))
       svgHeadRef.value.setAttribute('transform', `rotate(${angle} ${x} ${y})`)
     }
 
@@ -101,7 +103,7 @@ watch(
         :stroke-width="strokeWidth"
         stroke-linecap="square"
         stroke-linejoin="miter"
-        stroke-opacity="0.5"
+        stroke-opacity="0.15"
         fill="none"
       />
       <rect

@@ -225,7 +225,16 @@ export function getAngle(curve: string, progress: number, detailScale = 1.0): nu
   const EPS = 0.001
   const p1 = getPoint(curve, Math.max(0, progress - EPS), detailScale)
   const p2 = getPoint(curve, Math.min(1, progress + EPS), detailScale)
-  return Math.atan2(p2.y - p1.y, p2.x - p1.x) * (180 / Math.PI)
+  const dx = p2.x - p1.x
+  const dy = p2.y - p1.y
+  // Fallback to larger epsilon when sample points are too close (e.g. spiral at progress=0)
+  if (dx * dx + dy * dy < 1e-6) {
+    const BIG_EPS = 0.01
+    const q1 = getPoint(curve, Math.max(0, progress - BIG_EPS), detailScale)
+    const q2 = getPoint(curve, Math.min(1, progress + BIG_EPS), detailScale)
+    return Math.atan2(q2.y - q1.y, q2.x - q1.x) * (180 / Math.PI)
+  }
+  return Math.atan2(dy, dx) * (180 / Math.PI)
 }
 
 /**

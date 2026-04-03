@@ -11,6 +11,7 @@ interface MathCurveProgressProps {
   trackColor?: string
   fillColor?: string
   strokeWidth?: number
+  ariaLabel?: string
   class?: string
 }
 
@@ -20,6 +21,8 @@ const props = withDefaults(defineProps<MathCurveProgressProps>(), {
   showValue: false,
   strokeWidth: 4,
 })
+
+const HEAD_SIZE = 8
 
 const sizeMap: Record<NonNullable<MathCurveProgressProps['size']>, number> = {
   sm: 48,
@@ -42,90 +45,57 @@ const headTransform = computed(() => {
   const angle = headAngle.value
   return `rotate(${angle} ${x} ${y})`
 })
-
-// Build the fill path: only draw up to value progress
-const fillPath = computed(() => {
-  const curve = props.curve ?? 'spiral'
-  const progress = clampedValue.value / 100
-  if (progress <= 0) return ''
-  // Build a partial path by limiting segments proportionally
-  const totalSegments = 200
-  const segments = Math.max(1, Math.round(totalSegments * progress))
-  let d = ''
-  for (let i = 0; i <= segments; i++) {
-    const p = (i / totalSegments) * progress
-    const pt = getPoint(curve, p)
-    if (i === 0) {
-      d = `M ${pt.x.toFixed(2)} ${pt.y.toFixed(2)}`
-    } else {
-      d += ` L ${pt.x.toFixed(2)} ${pt.y.toFixed(2)}`
-    }
-  }
-  return d
-})
 </script>
 
 <template>
-  <div
-    :class="props.class"
-    :style="{ width: pixelSize + 'px', height: pixelSize + 'px', position: 'relative', display: 'inline-block' }"
+  <svg
+    :width="pixelSize"
+    :height="pixelSize"
+    viewBox="0 0 100 100"
     role="progressbar"
     :aria-valuenow="clampedValue"
     aria-valuemin="0"
     aria-valuemax="100"
+    :aria-label="props.ariaLabel ?? `${clampedValue}% progress`"
+    :class="props.class"
+    style="overflow: visible; display: block"
   >
-    <svg
-      :width="pixelSize"
-      :height="pixelSize"
-      viewBox="0 0 100 100"
-      style="overflow: visible; display: block"
-    >
-      <!-- Track (full curve, low opacity) -->
-      <path
-        :d="trackPath"
-        :stroke="trackColor ?? 'currentColor'"
-        :stroke-width="strokeWidth"
-        stroke-opacity="0.2"
-        stroke-linecap="square"
-        stroke-linejoin="miter"
-        fill="none"
-      />
-      <!-- Fill (partial curve up to value) -->
-      <path
-        :d="fillPath"
-        :stroke="fillColor ?? 'currentColor'"
-        :stroke-width="strokeWidth"
-        stroke-linecap="square"
-        stroke-linejoin="miter"
-        fill="none"
-        style="transition: d 300ms ease"
-      />
-      <!-- Head rect -->
-      <rect
-        :width="strokeWidth * 2"
-        :height="strokeWidth * 2"
-        :x="headPoint.x - strokeWidth"
-        :y="headPoint.y - strokeWidth"
-        :fill="fillColor ?? 'currentColor'"
-        :transform="headTransform"
-        :style="{ transition: 'transform 300ms ease' }"
-      />
-    </svg>
-    <!-- Optional value label -->
-    <div
+    <!-- Track (full curve, low opacity) -->
+    <path
+      :d="trackPath"
+      :stroke="trackColor ?? 'currentColor'"
+      :stroke-width="strokeWidth"
+      stroke-opacity="0.2"
+      stroke-linecap="square"
+      stroke-linejoin="miter"
+      fill="none"
+    />
+    <!-- Head rect — moves along the curve proportional to value -->
+    <rect
+      :width="HEAD_SIZE"
+      :height="HEAD_SIZE"
+      :x="headPoint.x - HEAD_SIZE / 2"
+      :y="headPoint.y - HEAD_SIZE / 2"
+      :fill="fillColor ?? 'hsl(var(--primary))'"
+      stroke="currentColor"
+      stroke-width="1.5"
+      :transform="headTransform"
+      :style="{ transition: 'transform 300ms ease' }"
+    />
+    <!-- Optional numeric label -->
+    <text
       v-if="showValue"
-      style="
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        font-size: 0.75em;
-        pointer-events: none;
-      "
+      x="50"
+      y="50"
+      text-anchor="middle"
+      dominant-baseline="central"
+      font-size="12"
+      font-weight="700"
+      fill="currentColor"
+      letter-spacing="0.05em"
+      style="user-select: none; font-family: inherit"
     >
       {{ Math.round(clampedValue) }}%
-    </div>
-  </div>
+    </text>
+  </svg>
 </template>

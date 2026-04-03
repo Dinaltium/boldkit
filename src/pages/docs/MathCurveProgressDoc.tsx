@@ -4,35 +4,111 @@ import { ComponentDoc, ExampleSection } from '@/components/docs/ComponentDoc'
 const sourceCode = `import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
+import {
+  buildPath,
+  getPoint,
+  getAngle,
+  type ProgressCurveKey,
+} from '@/lib/math-curves'
 
-const mathCurveProgressVariants = cva('relative', {
+const mathCurveProgressVariants = cva('', {
   variants: {
     size: {
-      sm: 'h-16 w-16',
-      md: 'h-24 w-24',
-      lg: 'h-32 w-32',
+      sm: 'w-12 h-12',
+      md: 'w-16 h-16',
+      lg: 'w-24 h-24',
     },
   },
-  defaultVariants: {
-    size: 'md',
-  },
+  defaultVariants: { size: 'md' },
 })
 
 export interface MathCurveProgressProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends React.SVGAttributes<SVGSVGElement>,
     VariantProps<typeof mathCurveProgressVariants> {
   value: number
-  curve?: 'spiral' | 'heart' | 'lissajous' | 'cardioid' | 'rose'
+  curve?: ProgressCurveKey
   showValue?: boolean
   trackColor?: string
   fillColor?: string
   strokeWidth?: number
 }
 
-const MathCurveProgress = React.forwardRef<HTMLDivElement, MathCurveProgressProps>(
-  ({ className, value, curve = 'spiral', size, showValue = false, trackColor, fillColor, strokeWidth = 4, ...props }, ref) => {
-    // Renders an SVG that traces the given mathematical curve
-    // The filled portion of the curve corresponds proportionally to value (0-100)
+const MathCurveProgress = React.forwardRef<SVGSVGElement, MathCurveProgressProps>(
+  (
+    {
+      className,
+      size,
+      value,
+      curve = 'spiral',
+      showValue = false,
+      trackColor,
+      fillColor,
+      strokeWidth = 4,
+      ...props
+    },
+    ref
+  ) => {
+    const clampedValue = Math.min(100, Math.max(0, value))
+    const progress = clampedValue / 100
+
+    const trackPath = React.useMemo(() => buildPath(curve, 1.0), [curve])
+    const headPoint = React.useMemo(() => getPoint(curve, progress), [curve, progress])
+    const headAngle = React.useMemo(() => getAngle(curve, progress), [curve, progress])
+    const HEAD_SIZE = 8
+
+    const resolvedTrackStroke = trackColor ?? 'currentColor'
+    const resolvedFillColor = fillColor ?? 'hsl(var(--primary))'
+
+    return (
+      <svg
+        ref={ref}
+        viewBox="0 0 100 100"
+        xmlns="http://www.w3.org/2000/svg"
+        role="progressbar"
+        aria-valuenow={clampedValue}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={\`\${Math.round(clampedValue)}% progress\`}
+        className={cn(mathCurveProgressVariants({ size }), className)}
+        {...props}
+      >
+        <path
+          d={trackPath}
+          fill="none"
+          stroke={resolvedTrackStroke}
+          strokeWidth={strokeWidth}
+          strokeOpacity={0.2}
+          strokeLinecap="square"
+          strokeLinejoin="miter"
+        />
+        <rect
+          width={HEAD_SIZE}
+          height={HEAD_SIZE}
+          x={headPoint.x - HEAD_SIZE / 2}
+          y={headPoint.y - HEAD_SIZE / 2}
+          fill={resolvedFillColor}
+          stroke="currentColor"
+          strokeWidth={1.5}
+          transform={\`rotate(\${headAngle} \${headPoint.x} \${headPoint.y})\`}
+          style={{ transition: 'transform 300ms ease' }}
+        />
+        {showValue && (
+          <text
+            x={50}
+            y={50}
+            textAnchor="middle"
+            dominantBaseline="central"
+            fontSize={12}
+            fontWeight={700}
+            fill="currentColor"
+            letterSpacing="0.05em"
+            style={{ userSelect: 'none', fontFamily: 'inherit' }}
+          >
+            {\`\${Math.round(clampedValue)}%\`}
+          </text>
+        )}
+      </svg>
+    )
   }
 )
 MathCurveProgress.displayName = 'MathCurveProgress'
@@ -41,32 +117,18 @@ export { MathCurveProgress, mathCurveProgressVariants }`
 
 const vueSourceCode = `<script setup lang="ts">
 import { computed } from 'vue'
-import { cva, type VariantProps } from 'class-variance-authority'
-import { cn } from '@/lib/utils'
-
-const mathCurveProgressVariants = cva('relative', {
-  variants: {
-    size: {
-      sm: 'h-16 w-16',
-      md: 'h-24 w-24',
-      lg: 'h-32 w-32',
-    },
-  },
-  defaultVariants: {
-    size: 'md',
-  },
-})
-
-type MathCurveProgressVariants = VariantProps<typeof mathCurveProgressVariants>
+import { getPoint, getAngle, buildPath } from '@/lib/math-curves'
+import type { ProgressCurveKey } from '@/lib/math-curves'
 
 interface MathCurveProgressProps {
   value: number
-  curve?: 'spiral' | 'heart' | 'lissajous' | 'cardioid' | 'rose'
-  size?: MathCurveProgressVariants['size']
+  curve?: ProgressCurveKey
+  size?: 'sm' | 'md' | 'lg'
   showValue?: boolean
   trackColor?: string
   fillColor?: string
   strokeWidth?: number
+  ariaLabel?: string
   class?: string
 }
 
@@ -76,12 +138,68 @@ const props = withDefaults(defineProps<MathCurveProgressProps>(), {
   showValue: false,
   strokeWidth: 4,
 })
-</script>
+
+const HEAD_SIZE = 8
+const sizeMap = { sm: 48, md: 64, lg: 96 }
+const pixelSize = computed(() => sizeMap[props.size ?? 'md'])
+const clampedValue = computed(() => Math.min(100, Math.max(0, props.value ?? 0)))
+const trackPath = computed(() => buildPath(props.curve ?? 'spiral'))
+const headPoint = computed(() => getPoint(props.curve ?? 'spiral', clampedValue.value / 100))
+const headAngle = computed(() => getAngle(props.curve ?? 'spiral', clampedValue.value / 100))
+const headTransform = computed(() => {
+  const { x, y } = headPoint.value
+  return \`rotate(\${headAngle.value} \${x} \${y})\`
+})
+<\/script>
 
 <template>
-  <div :class="cn(mathCurveProgressVariants({ size }), props.class)">
-    <!-- SVG rendering the mathematical curve with progress fill -->
-  </div>
+  <svg
+    :width="pixelSize"
+    :height="pixelSize"
+    viewBox="0 0 100 100"
+    role="progressbar"
+    :aria-valuenow="clampedValue"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    :aria-label="props.ariaLabel ?? \`\${clampedValue}% progress\`"
+    :class="props.class"
+    style="overflow: visible; display: block"
+  >
+    <path
+      :d="trackPath"
+      :stroke="trackColor ?? 'currentColor'"
+      :stroke-width="strokeWidth"
+      stroke-opacity="0.2"
+      stroke-linecap="square"
+      stroke-linejoin="miter"
+      fill="none"
+    />
+    <rect
+      :width="HEAD_SIZE"
+      :height="HEAD_SIZE"
+      :x="headPoint.x - HEAD_SIZE / 2"
+      :y="headPoint.y - HEAD_SIZE / 2"
+      :fill="fillColor ?? 'hsl(var(--primary))'"
+      stroke="currentColor"
+      stroke-width="1.5"
+      :transform="headTransform"
+      :style="{ transition: 'transform 300ms ease' }"
+    />
+    <text
+      v-if="showValue"
+      x="50"
+      y="50"
+      text-anchor="middle"
+      dominant-baseline="central"
+      font-size="12"
+      font-weight="700"
+      fill="currentColor"
+      letter-spacing="0.05em"
+      style="user-select: none; font-family: inherit"
+    >
+      {{ Math.round(clampedValue) }}%
+    </text>
+  </svg>
 </template>`
 
 const usageCode = `import { MathCurveProgress } from '@/components/ui/math-curve-progress'

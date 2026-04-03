@@ -4,129 +4,130 @@ import { ComponentDoc, ExampleSection } from '@/components/docs/ComponentDoc'
 const sourceCode = `import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
+import {
+  buildPath,
+  getPoint,
+  getAngle,
+  getDetailScale,
+  getCurvePulseDuration,
+  type LoaderCurveKey,
+} from '@/lib/math-curves'
 
 const mathCurveLoaderVariants = cva('', {
   variants: {
     size: {
-      xs: 'h-8 w-8',
-      sm: 'h-12 w-12',
-      md: 'h-16 w-16',
-      lg: 'h-24 w-24',
-      xl: 'h-32 w-32',
-    },
-    speed: {
-      slow: '[--duration:4s]',
-      normal: '[--duration:2s]',
-      fast: '[--duration:1s]',
+      xs: 'w-6 h-6',
+      sm: 'w-8 h-8',
+      md: 'w-12 h-12',
+      lg: 'w-16 h-16',
+      xl: 'w-24 h-24',
     },
   },
-  defaultVariants: {
-    size: 'md',
-    speed: 'normal',
-  },
+  defaultVariants: { size: 'md' },
 })
 
-export type CurveType =
-  | 'rose'
-  | 'lissajous'
-  | 'butterfly'
-  | 'hypotrochoid'
-  | 'cardioid'
-  | 'lemniscate'
-  | 'fourier'
-  | 'rose3'
+const SPEED_DURATION: Record<string, number> = {
+  slow: 9000,
+  normal: 5500,
+  fast: 3000,
+}
 
 export interface MathCurveLoaderProps
   extends React.SVGAttributes<SVGSVGElement>,
     VariantProps<typeof mathCurveLoaderVariants> {
-  curve?: CurveType
+  curve?: LoaderCurveKey
+  speed?: 'slow' | 'normal' | 'fast'
   trackColor?: string
   headColor?: string
   strokeWidth?: number
   headSize?: number
 }
 
-// Each curve generates parametric (x, y) points from t ∈ [0, 2π]
-function getCurvePoints(curve: CurveType, steps = 300): [number, number][] {
-  const points: [number, number][] = []
-  for (let i = 0; i <= steps; i++) {
-    const t = (i / steps) * 2 * Math.PI
-    let x = 0, y = 0
-    switch (curve) {
-      case 'rose':      { const r = Math.cos(2 * t); x = r * Math.cos(t); y = r * Math.sin(t); break }
-      case 'lissajous': { x = Math.sin(3 * t + Math.PI / 4); y = Math.sin(2 * t); break }
-      case 'butterfly': { const e = Math.exp(Math.cos(t)) - 2 * Math.cos(4 * t) - Math.pow(Math.sin(t / 12), 5); x = Math.sin(t) * e; y = -Math.cos(t) * e; break }
-      case 'hypotrochoid': { x = 3 * Math.cos(t) + Math.cos(3 * t); y = 3 * Math.sin(t) - Math.sin(3 * t); break }
-      case 'cardioid':  { const rc = 1 - Math.cos(t); x = rc * Math.cos(t); y = rc * Math.sin(t); break }
-      case 'lemniscate': { const d = 1 + Math.sin(t) ** 2; x = Math.cos(t) / d; y = Math.sin(t) * Math.cos(t) / d; break }
-      case 'fourier':   { x = Math.cos(t) + 0.5 * Math.cos(3 * t) + 0.25 * Math.cos(5 * t); y = Math.sin(t) + 0.5 * Math.sin(3 * t) + 0.25 * Math.sin(5 * t); break }
-      case 'rose3':     { const r3 = Math.cos(3 * t); x = r3 * Math.cos(t); y = r3 * Math.sin(t); break }
-    }
-    points.push([x, y])
-  }
-  return points
-}
-
-// Normalise points into SVG viewport, returning an SVG path string
-function pointsToPath(points: [number, number][]): string {
-  const xs = points.map(p => p[0])
-  const ys = points.map(p => p[1])
-  const minX = Math.min(...xs), maxX = Math.max(...xs)
-  const minY = Math.min(...ys), maxY = Math.max(...ys)
-  const pad = 10
-  const w = 100 - pad * 2, h = 100 - pad * 2
-  const toSVG = ([x, y]: [number, number]) => {
-    const sx = pad + ((x - minX) / (maxX - minX || 1)) * w
-    const sy = pad + ((y - minY) / (maxY - minY || 1)) * h
-    return \`\${sx.toFixed(2)},\${sy.toFixed(2)}\`
-  }
-  return 'M ' + points.map(toSVG).join(' L ')
-}
-
-// Animated dot travels along the path using CSS offset-path + offset-distance
 const MathCurveLoader = React.forwardRef<SVGSVGElement, MathCurveLoaderProps>(
   (
     {
       className,
-      curve = 'rose',
       size,
-      speed,
+      curve = 'rose',
+      speed = 'normal',
       trackColor,
       headColor,
       strokeWidth = 4,
       headSize = 8,
+      'aria-label': ariaLabel = 'Loading',
       ...props
     },
     ref
   ) => {
-    const points = React.useMemo(() => getCurvePoints(curve), [curve])
-    const pathD = React.useMemo(() => pointsToPath(points), [points])
-    const pathId = React.useId()
+    const pathRef = React.useRef<SVGPathElement>(null)
+    const rectRef = React.useRef<SVGRectElement>(null)
+    const rafRef = React.useRef<number>(0)
+    const startTimeRef = React.useRef<number>(performance.now())
+
+    const durationMs = SPEED_DURATION[speed] ?? SPEED_DURATION.normal
+    const trackPath = React.useMemo(() => buildPath(curve, 1.0), [curve])
+
+    React.useEffect(() => {
+      startTimeRef.current = performance.now()
+
+      const tick = () => {
+        const now = performance.now()
+        const elapsed = (now - startTimeRef.current) % durationMs
+        const progress = elapsed / durationMs
+        const detailScale = getDetailScale(now, getCurvePulseDuration(curve))
+
+        const { x, y } = getPoint(curve, progress, detailScale)
+        const angle = getAngle(curve, progress, detailScale)
+
+        if (pathRef.current) {
+          pathRef.current.setAttribute('d', buildPath(curve, detailScale))
+        }
+        if (rectRef.current) {
+          rectRef.current.setAttribute('x', String(x - headSize / 2))
+          rectRef.current.setAttribute('y', String(y - headSize / 2))
+          rectRef.current.setAttribute('transform', \`rotate(\${angle} \${x} \${y})\`)
+        }
+
+        rafRef.current = requestAnimationFrame(tick)
+      }
+
+      rafRef.current = requestAnimationFrame(tick)
+      return () => cancelAnimationFrame(rafRef.current)
+    }, [curve, speed, durationMs, headSize])
+
+    const resolvedTrackStroke = trackColor ?? 'currentColor'
+    const resolvedHeadFill = headColor ?? 'hsl(var(--primary))'
 
     return (
       <svg
         ref={ref}
         viewBox="0 0 100 100"
         xmlns="http://www.w3.org/2000/svg"
-        className={cn(mathCurveLoaderVariants({ size, speed }), className)}
+        role="status"
+        aria-label={ariaLabel}
+        className={cn(mathCurveLoaderVariants({ size }), className)}
         {...props}
       >
-        {/* Track */}
         <path
-          d={pathD}
+          ref={pathRef}
+          d={trackPath}
           fill="none"
-          stroke={trackColor ?? 'currentColor'}
-          strokeWidth={strokeWidth * 0.5}
-          opacity={0.2}
+          stroke={resolvedTrackStroke}
+          strokeWidth={strokeWidth}
+          strokeOpacity={0.2}
+          strokeLinecap="square"
+          strokeLinejoin="miter"
         />
-        {/* Animated head */}
-        <circle r={headSize / 2} fill={headColor ?? 'currentColor'}>
-          <animateMotion dur="var(--duration, 2s)" repeatCount="indefinite" rotate="auto">
-            <mpath xlinkHref={\`#\${pathId}\`} />
-          </animateMotion>
-        </circle>
-        {/* Hidden path for animateMotion reference */}
-        <path id={pathId} d={pathD} fill="none" stroke="none" />
+        <rect
+          ref={rectRef}
+          width={headSize}
+          height={headSize}
+          x={50 - headSize / 2}
+          y={50 - headSize / 2}
+          fill={resolvedHeadFill}
+          stroke="currentColor"
+          strokeWidth={1.5}
+        />
       </svg>
     )
   }
@@ -136,45 +137,19 @@ MathCurveLoader.displayName = 'MathCurveLoader'
 export { MathCurveLoader, mathCurveLoaderVariants }`
 
 const vueSourceCode = `<script setup lang="ts">
-import { computed, useId } from 'vue'
-import { cva, type VariantProps } from 'class-variance-authority'
-import { cn } from '@/lib/utils'
-
-const mathCurveLoaderVariants = cva('', {
-  variants: {
-    size: {
-      xs: 'h-8 w-8',
-      sm: 'h-12 w-12',
-      md: 'h-16 w-16',
-      lg: 'h-24 w-24',
-      xl: 'h-32 w-32',
-    },
-    speed: {
-      slow: '[--duration:4s]',
-      normal: '[--duration:2s]',
-      fast: '[--duration:1s]',
-    },
-  },
-  defaultVariants: {
-    size: 'md',
-    speed: 'normal',
-  },
-})
-
-type CurveType =
-  | 'rose' | 'lissajous' | 'butterfly' | 'hypotrochoid'
-  | 'cardioid' | 'lemniscate' | 'fourier' | 'rose3'
-
-type MathCurveLoaderVariants = VariantProps<typeof mathCurveLoaderVariants>
+import { shallowRef, computed, onMounted, onUnmounted, watch } from 'vue'
+import { getPoint, getAngle, buildPath, getDetailScale, getCurvePulseDuration } from '@/lib/math-curves'
+import type { LoaderCurveKey } from '@/lib/math-curves'
 
 interface MathCurveLoaderProps {
-  curve?: CurveType
-  size?: MathCurveLoaderVariants['size']
-  speed?: MathCurveLoaderVariants['speed']
+  curve?: LoaderCurveKey
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+  speed?: 'slow' | 'normal' | 'fast'
   trackColor?: string
   headColor?: string
   strokeWidth?: number
   headSize?: number
+  ariaLabel?: string
   class?: string
 }
 
@@ -184,36 +159,79 @@ const props = withDefaults(defineProps<MathCurveLoaderProps>(), {
   speed: 'normal',
   strokeWidth: 4,
   headSize: 8,
+  ariaLabel: 'Loading',
 })
 
-const pathId = useId()
+const sizeMap = { xs: 24, sm: 32, md: 48, lg: 64, xl: 96 }
+const speedMap = { slow: 9000, normal: 5500, fast: 3000 }
+const pixelSize = computed(() => sizeMap[props.size ?? 'md'])
 
-// getCurvePoints + pointsToPath logic mirrors the React implementation
-const pathD = computed(() => {
-  const points = getCurvePoints(props.curve)
-  return pointsToPath(points)
-})
-</script>
+const svgPathRef = shallowRef<SVGPathElement | null>(null)
+const svgHeadRef = shallowRef<SVGRectElement | null>(null)
+let rafId = 0
+let startTime = 0
+
+function startLoop() {
+  cancelAnimationFrame(rafId)
+  startTime = performance.now()
+
+  function frame(now: number) {
+    const elapsed = now - startTime
+    const loopDuration = speedMap[props.speed ?? 'normal']
+    const progress = (elapsed % loopDuration) / loopDuration
+    const detailScale = getDetailScale(elapsed, getCurvePulseDuration(props.curve ?? 'rose'))
+
+    if (svgPathRef.value) {
+      svgPathRef.value.setAttribute('d', buildPath(props.curve ?? 'rose', detailScale))
+    }
+    if (svgHeadRef.value) {
+      const { x, y } = getPoint(props.curve ?? 'rose', progress, detailScale)
+      const angle = getAngle(props.curve ?? 'rose', progress, detailScale)
+      const half = (props.headSize ?? 8) / 2
+      svgHeadRef.value.setAttribute('x', String(x - half))
+      svgHeadRef.value.setAttribute('y', String(y - half))
+      svgHeadRef.value.setAttribute('transform', \`rotate(\${angle} \${x} \${y})\`)
+    }
+    rafId = requestAnimationFrame(frame)
+  }
+
+  rafId = requestAnimationFrame(frame)
+}
+
+onMounted(() => startLoop())
+onUnmounted(() => cancelAnimationFrame(rafId))
+watch(() => [props.curve, props.speed], () => startLoop())
+<\/script>
 
 <template>
   <svg
+    :width="pixelSize"
+    :height="pixelSize"
     viewBox="0 0 100 100"
-    xmlns="http://www.w3.org/2000/svg"
-    :class="cn(mathCurveLoaderVariants({ size, speed }), props.class)"
+    role="status"
+    :aria-label="props.ariaLabel"
+    :class="props.class"
+    style="overflow: visible; display: block"
   >
     <path
-      :d="pathD"
-      fill="none"
+      ref="svgPathRef"
       :stroke="trackColor ?? 'currentColor'"
-      :stroke-width="strokeWidth * 0.5"
-      :opacity="0.2"
+      :stroke-width="strokeWidth"
+      stroke-opacity="0.2"
+      stroke-linecap="square"
+      stroke-linejoin="miter"
+      fill="none"
     />
-    <circle :r="headSize / 2" :fill="headColor ?? 'currentColor'">
-      <animateMotion dur="var(--duration, 2s)" repeatCount="indefinite" rotate="auto">
-        <mpath :href="\`#\${pathId}\`" />
-      </animateMotion>
-    </circle>
-    <path :id="pathId" :d="pathD" fill="none" stroke="none" />
+    <rect
+      ref="svgHeadRef"
+      :width="headSize"
+      :height="headSize"
+      :fill="headColor ?? 'hsl(var(--primary))'"
+      stroke="currentColor"
+      stroke-width="1.5"
+      x="0"
+      y="0"
+    />
   </svg>
 </template>`
 
@@ -252,6 +270,8 @@ export function MathCurveLoaderDoc() {
           <MathCurveLoader curve="hypotrochoid" size="xl" />
           <MathCurveLoader curve="cardioid" size="xl" />
           <MathCurveLoader curve="lemniscate" size="xl" />
+          <MathCurveLoader curve="fourier" size="xl" />
+          <MathCurveLoader curve="rose3" size="xl" />
         </div>
       </ComponentDoc>
 

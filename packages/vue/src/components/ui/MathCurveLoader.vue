@@ -11,6 +11,7 @@ interface MathCurveLoaderProps {
   headColor?: string
   strokeWidth?: number
   headSize?: number
+  ariaLabel?: string
   class?: string
 }
 
@@ -20,6 +21,7 @@ const props = withDefaults(defineProps<MathCurveLoaderProps>(), {
   speed: 'normal',
   strokeWidth: 4,
   headSize: 8,
+  ariaLabel: 'Loading',
 })
 
 const sizeMap: Record<NonNullable<MathCurveLoaderProps['size']>, number> = {
@@ -102,8 +104,7 @@ watch(
     :height="pixelSize"
     viewBox="0 0 100 100"
     role="status"
-    :aria-label="($attrs['aria-label'] as string) ?? 'Loading'"
-    v-bind="$attrs"
+    :aria-label="props.ariaLabel"
     :class="props.class"
     style="overflow: visible; display: block"
   >

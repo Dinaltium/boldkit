@@ -111,10 +111,9 @@ const MathCurveBackground = React.forwardRef<HTMLDivElement, MathCurveBackground
             width: '100%',
             height: '100%',
             zIndex: 0,
-            overflow: 'visible',
+            overflow: 'hidden',
             pointerEvents: 'none',
           }}
-          className="group-hover:[--track-opacity:0.3]"
         >
           <path
             ref={pathRef}

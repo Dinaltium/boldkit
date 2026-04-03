@@ -51,8 +51,8 @@ const MathCurveProgress = React.forwardRef<SVGSVGElement, MathCurveProgressProps
     const progress = clampedValue / 100
 
     const trackPath = React.useMemo(() => buildPath(curve, 1.0), [curve])
-    const headPoint = getPoint(curve, progress)
-    const headAngle = getAngle(curve, progress)
+    const headPoint = React.useMemo(() => getPoint(curve, progress), [curve, progress])
+    const headAngle = React.useMemo(() => getAngle(curve, progress), [curve, progress])
     const HEAD_SIZE = 8
 
     const resolvedTrackStroke = trackColor ?? 'currentColor'
@@ -67,6 +67,7 @@ const MathCurveProgress = React.forwardRef<SVGSVGElement, MathCurveProgressProps
         aria-valuenow={clampedValue}
         aria-valuemin={0}
         aria-valuemax={100}
+        aria-label={`${Math.round(clampedValue)}% progress`}
         className={cn(mathCurveProgressVariants({ size }), className)}
         {...props}
       >
@@ -90,7 +91,7 @@ const MathCurveProgress = React.forwardRef<SVGSVGElement, MathCurveProgressProps
           stroke="currentColor"
           strokeWidth={1.5}
           transform={`rotate(${headAngle} ${headPoint.x} ${headPoint.y})`}
-          style={{ transition: 'all 300ms ease' }}
+          style={{ transition: 'transform 300ms ease' }}
         />
         {/* Optional numeric label */}
         {showValue && (
