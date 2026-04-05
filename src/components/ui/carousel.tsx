@@ -280,7 +280,7 @@ const CarouselDots = React.forwardRef<
     >
       {scrollSnaps.map((_, index) => (
         <button
-          key={index}
+          key={`snap-${index}`}
           type="button"
           onClick={() => scrollTo(index)}
           className={cn(
@@ -289,7 +289,7 @@ const CarouselDots = React.forwardRef<
               ? 'bg-primary scale-110 shadow-[2px_2px_0px_hsl(var(--shadow-color))]'
               : 'bg-muted hover:bg-muted/80'
           )}
-          aria-label={`Go to slide ${index + 1}`}
+          aria-label={`Go to slide ${index + 1} of ${scrollSnaps.length}`}
         />
       ))}
     </div>

@@ -292,7 +292,7 @@ function TreeNode({ node, level }: TreeNodeProps) {
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div role="group">
-          {node.children!.map((child) => (
+          {(node.children ?? []).map((child) => (
             <TreeNode key={child.id} node={child} level={level + 1} />
           ))}
         </div>

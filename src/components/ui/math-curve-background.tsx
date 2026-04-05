@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
 import { cn } from '@/lib/utils'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 import {
   buildPath,
   getPoint,
@@ -93,53 +94,55 @@ const MathCurveBackground = React.forwardRef<HTMLDivElement, MathCurveBackground
     const Container = asChild ? Slot : 'div'
 
     return (
-      <Container
-        ref={ref}
-        className={cn('relative', className)}
-        {...props}
-      >
-        {/* Animated SVG background layer */}
-        <svg
-          viewBox="0 0 100 100"
-          xmlns="http://www.w3.org/2000/svg"
-          preserveAspectRatio="xMidYMid slice"
-          aria-hidden="true"
-          opacity={opacity}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            zIndex: 0,
-            overflow: 'hidden',
-            pointerEvents: 'none',
-          }}
+      <ErrorBoundary>
+        <Container
+          ref={ref}
+          className={cn('relative', className)}
+          {...props}
         >
-          <path
-            ref={pathRef}
-            d={initialTrackPath}
-            fill="none"
-            stroke={resolvedTrackStroke}
-            strokeWidth={strokeWidth}
-            strokeOpacity={0.15}
-            strokeLinecap="square"
-            strokeLinejoin="miter"
-            className="transition-[stroke-opacity] duration-200"
-          />
-          <rect
-            ref={rectRef}
-            width={HEAD_SIZE}
-            height={HEAD_SIZE}
-            x={50 - HEAD_SIZE / 2}
-            y={50 - HEAD_SIZE / 2}
-            fill={resolvedHeadFill}
-            stroke="currentColor"
-            strokeWidth={1.5}
-          />
-        </svg>
-        {/* Children sit above the SVG */}
-        <div style={{ position: 'relative', zIndex: 1 }}>{children}</div>
-      </Container>
+          {/* Animated SVG background layer */}
+          <svg
+            viewBox="0 0 100 100"
+            xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid slice"
+            aria-hidden="true"
+            opacity={opacity}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              zIndex: 0,
+              overflow: 'hidden',
+              pointerEvents: 'none',
+            }}
+          >
+            <path
+              ref={pathRef}
+              d={initialTrackPath}
+              fill="none"
+              stroke={resolvedTrackStroke}
+              strokeWidth={strokeWidth}
+              strokeOpacity={0.15}
+              strokeLinecap="square"
+              strokeLinejoin="miter"
+              className="transition-[stroke-opacity] duration-200"
+            />
+            <rect
+              ref={rectRef}
+              width={HEAD_SIZE}
+              height={HEAD_SIZE}
+              x={50 - HEAD_SIZE / 2}
+              y={50 - HEAD_SIZE / 2}
+              fill={resolvedHeadFill}
+              stroke="currentColor"
+              strokeWidth={1.5}
+            />
+          </svg>
+          {/* Children sit above the SVG */}
+          <div style={{ position: 'relative', zIndex: 1 }}>{children}</div>
+        </Container>
+      </ErrorBoundary>
     )
   }
 )

@@ -184,9 +184,9 @@ const GaugeChart = React.forwardRef<HTMLDivElement, GaugeChartProps>(
           />
 
           {/* Zone arcs */}
-          {zones.map((zone, index) => (
+          {zones.map((zone) => (
             <path
-              key={index}
+              key={`${zone.from}-${zone.to}-${zone.color}`}
               d={createArcPath(zone.from, zone.to, config.radius)}
               fill="none"
               stroke={zone.color}

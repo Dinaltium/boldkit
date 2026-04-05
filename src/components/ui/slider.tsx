@@ -56,6 +56,12 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
     }>({ onMove: null, onUp: null })
 
     const isControlled = controlledValue !== undefined
+    const wasControlled = React.useRef(isControlled)
+    React.useEffect(() => {
+      if (wasControlled.current !== isControlled) {
+        console.warn('[Slider] Component is changing from ' + (wasControlled.current ? 'controlled' : 'uncontrolled') + ' to ' + (isControlled ? 'controlled' : 'uncontrolled') + '. This is not supported.')
+      }
+    }, [isControlled])
     const [uncontrolledValue, setUncontrolledValue] = React.useState(defaultValue)
     const actualValue = isControlled ? controlledValue : uncontrolledValue
 
@@ -472,7 +478,7 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
         {/* Thumbs */}
         {springs.map((spring, index) => (
           <div
-            key={index}
+            key={`thumb-${index}`}
             role="slider"
             tabIndex={disabled ? -1 : 0}
             aria-valuemin={min}

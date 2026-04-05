@@ -97,7 +97,8 @@ function computeLayout(
   const cols = new Map<number, string[]>()
   depth.forEach((d, id) => {
     if (!cols.has(d)) cols.set(d, [])
-    cols.get(d)!.push(id)
+    const col = cols.get(d)
+    if (col) col.push(id)
   })
 
   // Node values = sum of in-links (or out-links for sources)

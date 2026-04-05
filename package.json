@@ -1,6 +1,6 @@
 {
   "name": "boldkit",
-  "version": "3.0.1",
+  "version": "3.0.4",
   "description": "A neubrutalism React component library built on shadcn/ui - Bold, raw, beautiful.",
   "author": "BoldKit Team",
   "license": "MIT",
@@ -84,6 +84,10 @@
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",
     "vaul": "^1.1.2"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

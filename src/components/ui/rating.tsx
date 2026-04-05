@@ -153,7 +153,7 @@ const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
 
           return (
             <button
-              key={index}
+              key={`star-${index}`}
               type="button"
               role="radio"
               aria-checked={index + 1 === Math.ceil(currentValue)}

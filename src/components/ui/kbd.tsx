@@ -55,7 +55,7 @@ const KbdCombo = React.forwardRef<HTMLDivElement, KbdComboProps>(
         {...props}
       >
         {keys.map((key, index) => (
-          <React.Fragment key={index}>
+          <React.Fragment key={`kbd-${index}-${key}`}>
             {index > 0 && (
               <span className="text-muted-foreground text-xs font-bold">{separator}</span>
             )}

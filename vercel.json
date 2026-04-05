@@ -1,7 +1,5 @@
 {
   "rewrites": [
-    { "source": "/r/:path*", "destination": "/r/:path*" },
-    { "source": "/:path*.json", "destination": "/:path*.json" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

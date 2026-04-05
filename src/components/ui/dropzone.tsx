@@ -72,6 +72,7 @@ const Dropzone = React.forwardRef<HTMLDivElement, DropzoneProps>(
     ref
   ) => {
     const [isDragging, setIsDragging] = React.useState(false)
+    const [isFocused, setIsFocused] = React.useState(false)
     const [acceptedFiles, setAcceptedFiles] = React.useState<File[]>([])
     const [rejectedFiles, setRejectedFiles] = React.useState<FileRejection[]>([])
     const inputRef = React.useRef<HTMLInputElement>(null)
@@ -195,6 +196,16 @@ const Dropzone = React.forwardRef<HTMLDivElement, DropzoneProps>(
       }
     }
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (!disabled && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault()
+        inputRef.current?.click()
+      }
+    }
+
+    const handleFocus = () => setIsFocused(true)
+    const handleBlur = () => setIsFocused(false)
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       processFiles(e.target.files)
       e.target.value = ''
@@ -210,15 +221,23 @@ const Dropzone = React.forwardRef<HTMLDivElement, DropzoneProps>(
     return (
       <div
         ref={ref}
-        className={cn(dropzoneVariants({ state: stateVariant, variant }), className)}
+        className={cn(
+          dropzoneVariants({ state: stateVariant, variant }),
+          isFocused && !disabled && 'outline outline-2 outline-offset-2 outline-primary',
+          className
+        )}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
         onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
         role="button"
         tabIndex={disabled ? -1 : 0}
         aria-disabled={disabled}
+        aria-label="File upload area"
         {...props}
       >
         <input

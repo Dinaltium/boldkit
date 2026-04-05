@@ -1377,6 +1377,79 @@
           "target": "components/ui/empty-state.tsx"
         }
       ]
+    },
+    {
+      "name": "math-curves",
+      "type": "registry:lib",
+      "description": "Framework-agnostic math engine for parametric curve animations (rose, lissajous, butterfly, hypotrochoid, cardioid, lemniscate, fourier, spiral, heart)",
+      "dependencies": [],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "registry/default/lib/math-curves.ts",
+          "type": "registry:lib",
+          "target": "lib/math-curves.ts"
+        }
+      ]
+    },
+    {
+      "name": "math-curve-loader",
+      "type": "registry:ui",
+      "description": "Animated mathematical curve loader with neubrutalism aesthetics — 8 curve variants including rose, lissajous, butterfly, and more",
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils",
+        "math-curves"
+      ],
+      "files": [
+        {
+          "path": "registry/default/ui/math-curve-loader.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/math-curve-loader.tsx"
+        }
+      ]
+    },
+    {
+      "name": "math-curve-progress",
+      "type": "registry:ui",
+      "description": "Progress indicator that traces a mathematical curve — value-driven head moves along the curve path from 0 to 100%",
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils",
+        "math-curves"
+      ],
+      "files": [
+        {
+          "path": "registry/default/ui/math-curve-progress.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/math-curve-progress.tsx"
+        }
+      ]
+    },
+    {
+      "name": "math-curve-background",
+      "type": "registry:ui",
+      "description": "Ambient animated mathematical curve background layer with neubrutalism aesthetics — wraps content with a slow-moving curve animation",
+      "dependencies": [
+        "@radix-ui/react-slot"
+      ],
+      "registryDependencies": [
+        "utils",
+        "math-curves"
+      ],
+      "files": [
+        {
+          "path": "registry/default/ui/math-curve-background.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/math-curve-background.tsx"
+        }
+      ]
     }
   ]
 }

@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 import {
   buildPath,
   getPoint,
@@ -59,57 +60,59 @@ const MathCurveProgress = React.forwardRef<SVGSVGElement, MathCurveProgressProps
     const resolvedFillColor = fillColor ?? 'hsl(var(--primary))'
 
     return (
-      <svg
-        ref={ref}
-        viewBox="0 0 100 100"
-        xmlns="http://www.w3.org/2000/svg"
-        role="progressbar"
-        aria-valuenow={clampedValue}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label={`${Math.round(clampedValue)}% progress`}
-        className={cn(mathCurveProgressVariants({ size }), className)}
-        {...props}
-      >
-        {/* Track layer */}
-        <path
-          d={trackPath}
-          fill="none"
-          stroke={resolvedTrackStroke}
-          strokeWidth={strokeWidth}
-          strokeOpacity={0.2}
-          strokeLinecap="square"
-          strokeLinejoin="miter"
-        />
-        {/* Head square — CSS transition for smooth value-driven movement */}
-        <rect
-          width={HEAD_SIZE}
-          height={HEAD_SIZE}
-          x={headPoint.x - HEAD_SIZE / 2}
-          y={headPoint.y - HEAD_SIZE / 2}
-          fill={resolvedFillColor}
-          stroke="currentColor"
-          strokeWidth={1.5}
-          transform={`rotate(${headAngle} ${headPoint.x} ${headPoint.y})`}
-          style={{ transition: 'transform 300ms ease' }}
-        />
-        {/* Optional numeric label */}
-        {showValue && (
-          <text
-            x={50}
-            y={50}
-            textAnchor="middle"
-            dominantBaseline="central"
-            fontSize={12}
-            fontWeight={700}
-            fill="currentColor"
-            letterSpacing="0.05em"
-            style={{ userSelect: 'none', fontFamily: 'inherit' }}
-          >
-            {Math.round(clampedValue)}%
-          </text>
-        )}
-      </svg>
+      <ErrorBoundary>
+        <svg
+          ref={ref}
+          viewBox="0 0 100 100"
+          xmlns="http://www.w3.org/2000/svg"
+          role="progressbar"
+          aria-valuenow={clampedValue}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label={`${Math.round(clampedValue)}% progress`}
+          className={cn(mathCurveProgressVariants({ size }), className)}
+          {...props}
+        >
+          {/* Track layer */}
+          <path
+            d={trackPath}
+            fill="none"
+            stroke={resolvedTrackStroke}
+            strokeWidth={strokeWidth}
+            strokeOpacity={0.2}
+            strokeLinecap="square"
+            strokeLinejoin="miter"
+          />
+          {/* Head square — CSS transition for smooth value-driven movement */}
+          <rect
+            width={HEAD_SIZE}
+            height={HEAD_SIZE}
+            x={headPoint.x - HEAD_SIZE / 2}
+            y={headPoint.y - HEAD_SIZE / 2}
+            fill={resolvedFillColor}
+            stroke="currentColor"
+            strokeWidth={1.5}
+            transform={`rotate(${headAngle} ${headPoint.x} ${headPoint.y})`}
+            style={{ transition: 'transform 300ms ease' }}
+          />
+          {/* Optional numeric label */}
+          {showValue && (
+            <text
+              x={50}
+              y={50}
+              textAnchor="middle"
+              dominantBaseline="central"
+              fontSize={12}
+              fontWeight={700}
+              fill="currentColor"
+              letterSpacing="0.05em"
+              style={{ userSelect: 'none', fontFamily: 'inherit' }}
+            >
+              {Math.round(clampedValue)}%
+            </text>
+          )}
+        </svg>
+      </ErrorBoundary>
     )
   }
 )

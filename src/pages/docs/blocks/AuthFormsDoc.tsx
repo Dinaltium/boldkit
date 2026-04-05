@@ -14,7 +14,7 @@ const variants = [
     preview: (
       <div className="flex items-center justify-center py-8 bg-background">
         <LoginForm
-          onSubmit={(data) => console.log('Login:', data)}
+          onSubmit={() => {}}
           socialProviders={['google', 'github']}
         />
       </div>
@@ -49,7 +49,7 @@ const handleSubmit = (data: { email: string; password: string }) => {
     preview: (
       <div className="flex items-center justify-center py-8 bg-background">
         <SignUpForm
-          onSubmit={(data) => console.log('SignUp:', data)}
+          onSubmit={() => {}}
           socialProviders={['google']}
         />
       </div>
@@ -81,7 +81,7 @@ import { AuthForms } from '@/components/blocks/application'
     preview: (
       <div className="flex items-center justify-center py-8 bg-background">
         <ForgotPasswordForm
-          onSubmit={(email) => console.log('Reset:', email)}
+          onSubmit={() => {}}
           onBackToLogin={() => {}}
         />
       </div>
@@ -111,8 +111,8 @@ import { AuthForms } from '@/components/blocks/application'
       <div className="flex items-center justify-center py-8 bg-background">
         <OTPVerificationForm
           email="user@example.com"
-          onSubmit={(otp: string) => console.log('OTP:', otp)}
-          onResend={() => console.log('Resend OTP')}
+          onSubmit={() => {}}
+          onResend={() => {}}
         />
       </div>
     ),
@@ -152,7 +152,7 @@ import { AuthForms } from '@/components/blocks/application'
           }
         >
           <LoginForm
-            onSubmit={(data) => console.log('Split Login:', data)}
+            onSubmit={() => {}}
             socialProviders={['google', 'github']}
           />
         </AuthSplitLayout>

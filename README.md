@@ -14,9 +14,9 @@ A neubrutalism component library for React and Vue 3, built on shadcn/ui.
 [![Nuxt](https://img.shields.io/badge/Nuxt-00DC82?logo=nuxtdotjs)](https://nuxt.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38B2AC?logo=tailwindcss)](https://tailwindcss.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript)](https://typescriptlang.org)
-[![Components](https://img.shields.io/badge/Components-50+-FF6B6B)](https://boldkit.dev/components)
+[![Components](https://img.shields.io/badge/Components-55+-FF6B6B)](https://boldkit.dev/components)
 [![Charts](https://img.shields.io/badge/Charts-10-9B59B6)](https://boldkit.dev/charts)
-[![Shapes](https://img.shields.io/badge/SVG_Shapes-42-FFD93D)](https://boldkit.dev/shapes)
+[![Shapes](https://img.shields.io/badge/SVG_Shapes-54-FFD93D)](https://boldkit.dev/shapes)
 
 [Website](https://boldkit.dev) · [Documentation](https://boldkit.dev/docs) · [Components](https://boldkit.dev/components) · [Charts](https://boldkit.dev/charts) · [Shapes](https://boldkit.dev/shapes)
 
@@ -30,7 +30,7 @@ A neubrutalism component library for React and Vue 3, built on shadcn/ui.
 
 ![BoldKit Components](assets/preview.png)
 
-*50+ beautifully crafted neubrutalism components and 10 chart types for React and Vue 3*
+*55+ beautifully crafted neubrutalism components, 10 chart types, and 54 SVG shapes for React and Vue 3*
 
 </div>
 
@@ -54,9 +54,10 @@ Neubrutalism (or neo-brutalism) is a bold design aesthetic characterized by:
 
 | Feature | Description |
 |---------|-------------|
-| **50+ Components** | Buttons, Cards, Dialogs, Forms, Spinners, Steppers, and more |
+| **55+ Components** | Buttons, Cards, Dialogs, Forms, Spinners, Steppers, and more |
 | **10 Chart Types** | Bar, Line, Area, Pie, Donut, Radar, Radial, Gauge, Sparkline |
-| **42 SVG Shapes** | Decorative shapes for unique layouts |
+| **54 SVG Shapes** | Decorative shapes with interactive Shape Builder |
+| **Math Curve Components** | Animated loaders, progress bars, and backgrounds powered by mathematical curves |
 | **React & Vue 3** | Full support for both frameworks |
 | **Nuxt Ready** | SSR-compatible with shadcn-nuxt module |
 | **shadcn CLI** | Install via `shadcn` (React) or `shadcn-vue` (Vue/Nuxt) |
@@ -270,6 +271,9 @@ import { Badge } from '@/components/ui/badge'
 - Skeleton
 - **Spinner** (5 animation variants) ✨ NEW
 - Sonner (Toast)
+- **Math Curve Loader** (animated loading spinners driven by mathematical curves) ✨ NEW
+- **Math Curve Progress** (progress bars rendered as animated mathematical curves) ✨ NEW
+- **Math Curve Background** (full-bleed animated curve backgrounds) ✨ NEW
 
 </details>
 
@@ -316,13 +320,47 @@ import { Badge } from '@/components/ui/badge'
 
 - Sticker (rotated labels)
 - Marquee (scrolling ticker)
-- 42 SVG Shapes (Burst, Blob, Lightning, Heart, Star, Sun, Planet, and more)
+- 54 SVG Shapes (Burst, Blob, Lightning, Heart, Star, Sun, Planet, and more)
+- **Shape Builder** (interactive tool to customize shapes, export SVG/JSX) ✨ NEW
 
 </details>
 
+## Math Curve Components
+
+Math Curve components render animated mathematical curves (Lissajous, rose curves, spirals, and more) as interactive UI elements — no external animation library required.
+
+### MathCurveLoader
+
+```tsx
+import { MathCurveLoader } from '@/components/ui/math-curve-loader'
+
+<MathCurveLoader curve="lissajous" size="md" speed="normal" />
+<MathCurveLoader curve="rose" size="lg" speed="slow" />
+<MathCurveLoader curve="spiral" size="xl" speed="fast" />
+```
+
+### MathCurveProgress
+
+```tsx
+import { MathCurveProgress } from '@/components/ui/math-curve-progress'
+
+<MathCurveProgress value={65} curve="lissajous" />
+<MathCurveProgress value={40} curve="rose" showLabel />
+```
+
+### MathCurveBackground
+
+```tsx
+import { MathCurveBackground } from '@/components/ui/math-curve-background'
+
+<MathCurveBackground curve="lissajous" opacity={0.15}>
+  <YourPageContent />
+</MathCurveBackground>
+```
+
 ## Shapes
 
-42 decorative SVG shapes for unique neubrutalism layouts:
+54 decorative SVG shapes for unique neubrutalism layouts:
 
 ### React
 
@@ -353,6 +391,10 @@ import { BurstShape, HeartShape, LightningShape } from '@/components/ui/shapes'
 ![SVG Shapes](assets/shapes.png)
 
 </div>
+
+### Shape Builder
+
+The interactive [Shape Builder](https://boldkit.dev/shapes/builder) lets you customize any shape's size, color, stroke width, and fill, then export it as SVG or copy it as JSX/Vue template code ready to paste into your project.
 
 ## Theming
 

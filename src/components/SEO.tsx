@@ -20,7 +20,7 @@ interface SEOProps {
   noIndex?: boolean
   breadcrumbs?: BreadcrumbItem[]
   faq?: FAQItem[]
-  structuredData?: Record<string, any>
+  structuredData?: Record<string, unknown>
 }
 
 const defaultMeta = {
@@ -120,7 +120,11 @@ export function SEO({
         const script = document.createElement('script')
         script.type = 'application/ld+json'
         script.setAttribute('data-schema', id)
-        script.textContent = JSON.stringify(schema)
+        try {
+          script.textContent = JSON.stringify(schema)
+        } catch {
+          // skip invalid structured data
+        }
         document.head.appendChild(script)
       }
     }
