@@ -43,3 +43,9 @@ coverage
 
 # Claude AI
 CLAUDE.md
+
+# Internal docs / design specs
+docs/superpowers/
+
+# GitHub Actions workflows (require workflow OAuth scope to push)
+.github/workflows/test-rn.yml
